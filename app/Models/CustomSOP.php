@@ -8,5 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class CustomSOP extends Model
 {
     use HasFactory;
-    protected $table='custom_s_o_p_s';
+    protected $table='custom_sops';
+
+    protected $primaryKey = 'custom_sop_id';
+    protected $fillable = ['custom_sop_name'];
+    protected $hidden = ['created_at', 'updated_at'];
 }

@@ -9,4 +9,8 @@ class PetHotelImage extends Model
 {
     use HasFactory;
     protected $table='pet_hotel_images';
+
+    protected $primaryKey = 'pet_hotel_image_id';
+    protected $fillable = ['pet_hotel_image_url'];
+    protected $hidden = ['created_at', 'updated_at'];
 }

@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\SupportedPetType;
 
 class SupportedPetTypeSeeder extends Seeder
 {
@@ -15,8 +15,8 @@ class SupportedPetTypeSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('supported_pet_types')->insert([
-            'supported_pet_type_name'=> 'Persian',
+        SupportedPetType::create([
+            'supported_pet_type_name'=> 'Persian'
         ]);
     }
 }

@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CancelSopSeeder::class);
         $this->call(FasilitasSeeder::class);
         $this->call(SopGeneralSeeder::class);
+        $this->call(SupportedPetSeeder::class);
     }
 }

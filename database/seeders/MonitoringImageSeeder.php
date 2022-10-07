@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\MonitoringImage;
 
 class MonitoringImageSeeder extends Seeder
 {
@@ -15,7 +15,7 @@ class MonitoringImageSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('monitoring_images')->insert([
+        MonitoringImage::create([
             'monitoring_image_url'=> 'url-image',
         ]);
     }
