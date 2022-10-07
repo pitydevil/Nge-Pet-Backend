@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(CustomSOPSeeder::class);
         $this->call(SupportedPetTypeSeeder::class);
+        $this->call(MonitoringImageSeeder::class);
     }
 }
