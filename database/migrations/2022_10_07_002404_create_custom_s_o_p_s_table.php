@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('custom_s_o_p_s', function (Blueprint $table) {
+        Schema::create('custom_sops', function (Blueprint $table) {
             $table->increments("custom_sop_id");
             $table->longText("custom_sop_name");
             $table->timestamps();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('custom_s_o_p_s');
+        Schema::dropIfExists('custom_sops');
     }
 };

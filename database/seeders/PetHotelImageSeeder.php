@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\PetHotelImage;
 
 class PetHotelImageSeeder extends Seeder
 {
@@ -15,7 +15,7 @@ class PetHotelImageSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('pet_hotel_images')->insert([
+        PetHotelImage::create([
             'pet_hotel_image_url'=> 'url-image',
         ]);
     }

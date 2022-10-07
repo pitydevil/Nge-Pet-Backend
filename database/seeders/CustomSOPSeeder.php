@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\CustomSOP;
 
 class CustomSOPSeeder extends Seeder
 {
@@ -15,7 +15,7 @@ class CustomSOPSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('custom_s_o_p_s')->insert([
+        CustomSOP::create([
             'custom_sop_name'=> 'Ajak main setiap 30 menit sekali',
         ]);
     }
