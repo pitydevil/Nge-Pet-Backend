@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('cancel_sops', function (Blueprint $table) {
             $table->increments('cancel_sops_id');
-            $table->string('cancel_sops_description');
+            $table->longText('cancel_sops_description');
             $table->timestamps();
         });
     }

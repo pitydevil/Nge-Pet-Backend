@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('fasilitas', function (Blueprint $table) {
             $table->increments('fasilitas_id');
-            $table->string('fasilitas_name');
-            $table->string('fasilitas_description');
+            $table->longText('fasilitas_name');
+            $table->longText('fasilitas_description');
             $table->timestamps();
         });
     }

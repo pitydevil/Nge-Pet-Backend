@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('asuransis', function (Blueprint $table) {
             $table->increments('asuransi_id');
-            $table->string('asuransi_name');
+            $table->longText('asuransi_name');
 
         });
     }

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('supported_pet_types', function (Blueprint $table) {
             $table->increments("supported_pet_type_id");
-            $table->string("supported_pet_type_name");
+            $table->longText("supported_pet_type_name");
             $table->timestamps();
         });
     }
