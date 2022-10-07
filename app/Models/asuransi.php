@@ -15,4 +15,7 @@ class Asuransi extends Model
     protected $fillable = ['asuransi_name'];
     protected $hidden = ['created_at', 'updated_at'];
 
-}
+    public function petHotel() {
+        return $this->belongsTo(PetHotel::class, 'asuransi_id', 'asuransi_id');
+    }
+}       

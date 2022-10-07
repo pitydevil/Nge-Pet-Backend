@@ -13,4 +13,8 @@ class CustomSOP extends Model
     protected $primaryKey = 'custom_sop_id';
     protected $fillable = ['custom_sop_name'];
     protected $hidden = ['created_at', 'updated_at'];
+
+    public function orderDetail() {
+        return $this->belongsTo(OrderDetail::class, 'custom_sop_id', 'custom_sop_id');
+    }
 }

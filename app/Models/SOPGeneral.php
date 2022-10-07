@@ -15,14 +15,8 @@ class SOPGeneral extends Model
     protected $fillable = ['sop_generals_description', 'sop_generals_asuransi'];
     protected $hidden = ['created_at', 'updated_at'];
 
-    // public function province()
-    // {
-    //     return $this->belongsTo(Province::class, 'province_id', 'province_id');
-    // }
-
-    // public function subdistricts()
-    // {
-    //     return $this->hasMany(Subdistrict::class, 'city_id', 'city_id');
-    // }
-
+    public function petHotel()
+    {
+        return $this->belongsTo(SOPGeneral::class, 'sop_generals_id', 'sop_generals_id');
+    }
 }

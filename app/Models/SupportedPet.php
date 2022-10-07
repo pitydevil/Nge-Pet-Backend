@@ -19,4 +19,12 @@ class SupportedPet extends Model
     public function supportedPetType() {
         return $this->hasMany(SupportedPetType::class, 'supported_pet_type_id', 'supported_pet_type_id');
     }
+
+    public function package() {
+        return $this->belongsTo(Package::class, 'supported_pet_id', 'supported_pet_id');
+    }
+
+    public function petHotel() {
+        return $this->belongsTo(PetHotel::class, 'supported_pet_id', 'supported_pet_id');
+    }
 }

@@ -13,4 +13,8 @@ class PetHotelImage extends Model
     protected $primaryKey = 'pet_hotel_image_id';
     protected $fillable = ['pet_hotel_image_url'];
     protected $hidden = ['created_at', 'updated_at'];
+    
+    public function petHotel() {
+        return $this->belongsTo(PetHotel::class, 'pet_hotel_image_id', 'pet_hotel_image_id');
+    }
 }
