@@ -14,7 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('monitorings', function (Blueprint $table) {
-            $table->id();
+            $table->id('monitoring_id')->index();
+            $table->longText('monitoring_name');
+            $table->foreignId('monitoring_image_id')->constrained('monitoring_images', 'monitoring_image_id')->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamps();
         });
     }

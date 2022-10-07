@@ -14,7 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('packages', function (Blueprint $table) {
-            $table->id();
+            $table->id('package_id')->index();
+            $table->foreignId('fasilitas_id')->constrained('fasilitas', 'fasilitas_id')->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('supported_pet_id')->constrained('supported_pets', 'supported_pet_id')->cascadeOnUpdate()->restrictOnDelete();
+            $table->bigInteger('package_price');
             $table->timestamps();
         });
     }

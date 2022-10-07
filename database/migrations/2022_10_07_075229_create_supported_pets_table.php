@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('supported_pets', function (Blueprint $table) {
-            $table->id('supported_pet_id');
+            $table->id('supported_pet_id')->index();
             $table->longText('supported_pet_name');
             $table->foreignId('supported_pet_type_id')->constrained('supported_pet_types', 'supported_pet_type_id')->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamps();

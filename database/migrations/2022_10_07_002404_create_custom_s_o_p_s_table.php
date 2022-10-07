@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('custom_sops', function (Blueprint $table) {
-            $table->increments("custom_sop_id");
+            $table->id("custom_sop_id")->index();
             $table->longText("custom_sop_name");
             $table->timestamps();
         });
