@@ -13,4 +13,9 @@ class MonitoringImage extends Model
     protected $primaryKey = 'monitoring_image_id';
     protected $fillable = ['monitoring_image_url'];
     protected $hidden = ['created_at', 'updated_at'];
+
+    
+    public function monitoring() {
+        return $this->belongsTo(Monitoring::class, 'monitoring_image_id', 'monitoring_image_id');
+    }
 }

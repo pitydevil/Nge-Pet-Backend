@@ -23,5 +23,10 @@ class DatabaseSeeder extends Seeder
         $this->call(FasilitasSeeder::class);
         $this->call(SopGeneralSeeder::class);
         $this->call(SupportedPetSeeder::class);
+        $this->call(MonitoringSeeder::class);
+        
+        $this->call(OrderDetailSeeder::class);
+        $this->call(OrderSeeder::class);
+        $this->call(PetHotelSeeder::class);
     }
 }

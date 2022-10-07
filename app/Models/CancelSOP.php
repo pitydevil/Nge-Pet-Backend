@@ -15,4 +15,7 @@ class CancelSOP extends Model
     protected $fillable = ['cancel_sops_description'];
     protected $hidden = ['created_at', 'updated_at'];
 
+    public function petHotel() {
+        return $this->belongsTo(PetHotel::class, 'cancel_sops_id', 'cancel_sops_id');
+    }
 }
