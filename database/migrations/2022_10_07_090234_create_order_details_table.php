@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('supported_pet_types', function (Blueprint $table) {
-            $table->id("supported_pet_type_id")->index();
-            $table->longText("supported_pet_type_name");
+        Schema::create('order_details', function (Blueprint $table) {
+            $table->id();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('supported_pet_types');
+        Schema::dropIfExists('order_details');
     }
 };
