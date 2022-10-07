@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('pet_hotel_images', function (Blueprint $table) {
             $table->increments("pet_hotel_image_id");
             $table->string("pet_hotel_image_url");
+            $table->timestamps();
         });
     }
 

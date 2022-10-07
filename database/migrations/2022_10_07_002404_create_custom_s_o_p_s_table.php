@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('custom_s_o_p_s', function (Blueprint $table) {
             $table->increments("custom_sop_id");
             $table->string("custom_sop_name");
+            $table->timestamps();
         });
     }
 
