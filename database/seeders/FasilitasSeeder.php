@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\fasilitas;
+use Illuminate\Support\Facades\DB;
 
 class FasilitasSeeder extends Seeder
 {
@@ -15,8 +16,20 @@ class FasilitasSeeder extends Seeder
      */
     public function run()
     {
-        fasilitas::create(['fasilitas_id' => 1, 'fasilitas_name' => 'Kandang Anjing', 'fasilitas_description' => 'Fasilitas kami dilengkapin dengan kandang anjing yang luas.']);
-        fasilitas::create(['fasilitas_id' => 2, 'fasilitas_name' => 'Kandang Kucing', 'fasilitas_description' => 'Fasilitas kami dilengkapin dengan kandang kucing yang luas.']);
-        fasilitas::create(['fasilitas_id' => 3, 'fasilitas_name' => 'Tempat Bermain', 'fasilitas_description' => 'Fasilitas kami dilengkapin dengan tempat bermain yang luas.']);
+        DB::table('fasilitas')->insert([
+            'fasilitas_name' => 'Kandang Anjing',
+            'fasilitas_description' => 'Fasilitas kami dilengkapin dengan kandang anjing yang luas.'
+        ]);
+        DB::table('fasilitas')->insert([
+            'fasilitas_name' => 'Kandang Kucing', 
+            'fasilitas_description' => 'Fasilitas kami dilengkapin dengan kandang kucing yang luas.'
+        ]);
+
+        DB::table('fasilitas')->insert([
+            'fasilitas_name' => 'Tempat Bermain', 
+            'fasilitas_description' => 'Fasilitas kami dilengkapin dengan tempat bermain yang luas.'
+        ]);
+
+        
     }
 }

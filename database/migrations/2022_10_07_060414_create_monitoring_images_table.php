@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('monitoring_images', function (Blueprint $table) {
             $table->increments("monitoring_image_id");
             $table->string("monitoring_image_url");
+            $table->timestamps();
         });
     }
 
