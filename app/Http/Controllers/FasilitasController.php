@@ -8,79 +8,118 @@ use App\Models\fasilitas;
 
 class FasilitasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+    public function getAllList(Request $request){
+        $limit = intval($request->input('limit', 25));
+        $fasilitas = Fasilitas::where('fasilitas_id', '=', $request->fasilitas_id)
+            ->orderBy('created_at', 'DESC')
+            ->paginate($limit);
+        
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => Helper::paginate($sop_general),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function getDetailID(Request $request, int $id){
+        $fasilitas = Fasilitas::where('fasilitas_id', '=', $id)
+            ->where('fasilitas_id', '=', $request->fasilitas_id)
+            ->first();
+        
+        if (!$fasilitas)  {
+            return response()->json([
+                'status' => 404,
+                'error' => 'FASILITAS_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
+        
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => $fasilitas,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StorefasilitasRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StorefasilitasRequest $request)
-    {
-        //
+    public function add(Request $request){
+        $validator = Validator::make($request->all(), [
+            'fasilitas_name' => 'required|string',
+            'fasilitas_description' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        $fasilitas = Fasilitas::create([
+            'creation_date' => $request->post('creation_date', Carbon::now()),
+            'fasilitas_name' => $request->post('fasilitas_name'),
+            'fasilitas_description' => $request->post('fasilitas_description'),
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\fasilitas  $fasilitas
-     * @return \Illuminate\Http\Response
-     */
-    public function show(fasilitas $fasilitas)
-    {
-        //
+    public function update(Request $request, int $id){
+        $validator = Validator::make($request->all(), [
+            'fasilitas_name' => 'required|string',
+            'fasilitas_description' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        $fasilitas = Fasilitas::where('fasilitas_id', '=', $id)
+            ->first();
+
+        if (!$fasilitas) return response()->json([
+            'status' => 404,
+            'error' => 'FASILITAS_NOT_FOUND',
+            'data' => null,
+        ], 404);
+
+        $fasilitas->fasilitas_id = $request->post('fasilitas_id', $fasilitas->fasilitas_id);
+        $fasilitas->fasilitas_name = $request->post('fasilitas_name', $fasilitas->fasilitas_name);
+        $fasilitas->fasilitas_description = $request->post('fasilitas_description', $fasilitas->fasilitas_description);
+        $fasilitas->save();
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\fasilitas  $fasilitas
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(fasilitas $fasilitas)
-    {
-        //
-    }
+    public function delete(Request $request, int $id){
+        $fasilitas = Fasilitas::where('fasilitas_id', '=', $id)
+            ->first();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatefasilitasRequest  $request
-     * @param  \App\Models\fasilitas  $fasilitas
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdatefasilitasRequest $request, fasilitas $fasilitas)
-    {
-        //
-    }
+        if (!$fasilitas) {
+            return response()->json([
+                'status' => 404,
+                'error' => 'FASILITAS_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        } 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\fasilitas  $fasilitas
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(fasilitas $fasilitas)
-    {
-        //
+        $fasilitas->delete();
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 }
