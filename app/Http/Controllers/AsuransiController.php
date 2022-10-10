@@ -8,79 +8,114 @@ use App\Models\asuransi;
 
 class AsuransiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+    public function getAllList(Request $request){
+        $limit = intval($request->input('limit', 25));
+        $asuransi = Asuransi::where('asuransi_id', '=', $request->asuransi_id)
+            ->orderBy('created_at', 'DESC')
+            ->paginate($limit);
+        
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => Helper::paginate($asuransi),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function getDetailID(Request $request, int $id){
+        $asuransi = Asuransi::where('asuransi_id', '=', $id)
+            ->where('asuransi_id', '=', $request->asuransi_id)
+            ->first();
+        
+        if (!$asuransi)  {
+            return response()->json([
+                'status' => 404,
+                'error' => 'ASURANSI_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
+        
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => $asuransi,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreasuransiRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreasuransiRequest $request)
-    {
-        //
+    public function add(Request $request){
+        $validator = Validator::make($request->all(), [
+            'asuransi_name' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        $asuransi = Asuransi::create([
+            'creation_date' => $request->post('creation_date', Carbon::now()),
+            'asuransi_name' => $request->post('asuransi_name'),
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\asuransi  $asuransi
-     * @return \Illuminate\Http\Response
-     */
-    public function show(asuransi $asuransi)
-    {
-        //
+    public function update(Request $request, int $id){
+        $validator = Validator::make($request->all(), [
+            'asuransi_name' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        $asuransi = Asuransi::where('asuransi_id', '=', $id)
+            ->first();
+
+        if (!$asuransi) return response()->json([
+            'status' => 404,
+            'error' => 'ASURANSI_NOT_FOUND',
+            'data' => null,
+        ], 404);
+
+        $asuransi->asurasi_id = $request->post('asuransi_id', $asuransi->asurasi_id);
+        $asuransi->asuransi_name = $request->post('asuransi_name', $asuransi->asuransi_name);
+        $asuransi->save();
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\asuransi  $asuransi
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(asuransi $asuransi)
-    {
-        //
-    }
+    public function delete(Request $request, int $id){
+        $asuransi = Asuransi::where('asuransi_id', '=', $id)
+            ->first();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateasuransiRequest  $request
-     * @param  \App\Models\asuransi  $asuransi
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateasuransiRequest $request, asuransi $asuransi)
-    {
-        //
-    }
+        if (!$asuransi) {
+            return response()->json([
+                'status' => 404,
+                'error' => 'ASURANSI_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        } 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\asuransi  $asuransi
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(asuransi $asuransi)
-    {
-        //
+        $asuransi->delete();
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 }

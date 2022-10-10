@@ -2,7 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\CancelSopController;
+use App\Http\Controllers\SopGeneralController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,7 +14,38 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::prefix('v1')->group(function() {
+    Route::prefix('cancel_sop')->group(function() {
+        Route::get('/', [CancelSopController::class, 'getAllList']);
+        Route::get('/{id}', [CancelSopController::class, 'getDetailID']);
+        Route::post('/add', [CancelSopController::class, 'add']);
+        Route::put('/{id}', [CancelSopController::class, 'update']);
+        Route::delete('/{id}', [CancelSopController::class, 'delete']);
+    });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::prefix('sop_general')->group(function() {
+        Route::get('/', [SopGeneralController::class, 'getAllList']);
+        Route::get('/{id}', [SopGeneralController::class, 'getDetailID']);
+        Route::post('/add', [SopGeneralController::class, 'add']);
+        Route::put('/{id}', [SopGeneralController::class, 'update']);
+        Route::delete('/{id}', [SopGeneralController::class, 'delete']);
+    });
+
+    Route::prefix('asuransi')->group(function() {
+        Route::get('/', [FasilitasController::class, 'getAllList']);
+        Route::get('/{id}', [FasilitasController::class, 'getDetailID']);
+        Route::post('/add', [FasilitasController::class, 'add']);
+        Route::put('/{id}', [FasilitasController::class, 'update']);
+        Route::delete('/{id}', [FasilitasController::class, 'delete']);
+    });
+
+    Route::prefix('asuransi')->group(function() {
+        Route::get('/', [AsuransiController::class, 'getAllList']);
+        Route::get('/{id}', [AsuransiController::class, 'getDetailID']);
+        Route::post('/add', [AsuransiController::class, 'add']);
+        Route::put('/{id}', [AsuransiController::class, 'update']);
+        Route::delete('/{id}', [AsuransiController::class, 'delete']);
+    });
+
+
 });
