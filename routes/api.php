@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CancelSopController;
 use App\Http\Controllers\CustomSOPController;
 use App\Http\Controllers\SopGeneralController;
+use App\Http\Controllers\SupportedPetTypeController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -54,6 +56,14 @@ Route::prefix('v1')->group(function() {
         Route::post('/add', [CustomSOPController::class, 'add']);
         Route::put('/{id}', [CustomSOPController::class, 'update']);
         Route::delete('/{id}', [CustomSOPController::class, 'delete']);
+    });
+
+    Route::prefix('supported_pet_type')->group(function() {
+        Route::get('/', [SupportedPetTypeController::class, 'getAllList']);
+        Route::get('/{id}', [SupportedPetTypeController::class, 'getDetailID']);
+        Route::post('/add', [SupportedPetTypeController::class, 'add']);
+        Route::put('/{id}', [SupportedPetTypeController::class, 'update']);
+        Route::delete('/{id}', [SupportedPetTypeController::class, 'delete']);
     });
 
 

@@ -2,85 +2,125 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helper;
 use App\Http\Requests\StoreSupportedPetTypeRequest;
 use App\Http\Requests\UpdateSupportedPetTypeRequest;
 use App\Models\SupportedPetType;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SupportedPetTypeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function getAllList(Request $request)
     {
-        //
+        $limit = intval($request->input('limit', 25));
+        $supported_pet_type = SupportedPetType::where('supported_pet_type_id', '=', $request->supported_pet_type_id)
+            ->orderBy('created_at', 'DESC')
+            ->paginate($limit);
+        
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => Helper::paginate($supported_pet_type),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function getDetailID(Request $request, int $id){
+        $supported_pet_type = SupportedPetType::where('supported_pet_type_id', '=', $id)
+            ->where('supported_pet_type_id', '=', $request->supported_pet_type_id)
+            ->first();
+        
+        if (!$supported_pet_type)  {
+            return response()->json([
+                'status' => 404,
+                'error' => 'SUPPORTED_PET_TYPE_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
+        
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => $supported_pet_type,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreSupportedPetTypeRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreSupportedPetTypeRequest $request)
-    {
-        //
+    public function add(Request $request){
+        $validator = Validator::make($request->all(), [
+            'supported_pet_type_name' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        $supported_pet_type = SupportedPetType::create([
+            'creation_date' => $request->post('creation_date', Carbon::now()),
+            'supported_pet_type_name' => $request->post('supported_pet_type_name'),
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\SupportedPetType  $supportedPetType
-     * @return \Illuminate\Http\Response
-     */
-    public function show(SupportedPetType $supportedPetType)
-    {
-        //
+    public function update(Request $request, int $id){
+        $validator = Validator::make($request->all(), [
+            'supported_pet_type_name' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        $supported_pet_type = SupportedPetType::where('supported_pet_type_id', '=', $id)
+            ->first();
+
+        if (!$supported_pet_type) return response()->json([
+            'status' => 404,
+            'error' => 'SUPPORTED_PET_TYPE_NOT_FOUND',
+            'data' => null,
+        ], 404);
+
+        $supported_pet_type->supported_pet_type_id = $request->post('supported_pet_type_id', $supported_pet_type->supported_pet_type_id);
+        $supported_pet_type->supported_pet_type_name = $request->post('supported_pet_type_name', $supported_pet_type->supported_pet_type_name);
+        $supported_pet_type->save();
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\SupportedPetType  $supportedPetType
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(SupportedPetType $supportedPetType)
-    {
-        //
-    }
+    public function delete(Request $request, int $id){
+        $supported_pet_type = SupportedPetType::where('supported_pet_type_id', '=', $id)
+            ->first();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateSupportedPetTypeRequest  $request
-     * @param  \App\Models\SupportedPetType  $supportedPetType
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateSupportedPetTypeRequest $request, SupportedPetType $supportedPetType)
-    {
-        //
-    }
+        if (!$supported_pet_type) {
+            return response()->json([
+                'status' => 404,
+                'error' => 'SUPPORTED_PET_TYPE_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        } 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\SupportedPetType  $supportedPetType
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(SupportedPetType $supportedPetType)
-    {
-        //
+        $supported_pet_type->delete();
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 }
