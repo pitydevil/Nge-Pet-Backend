@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\AsuransiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CancelSopController;
 use App\Http\Controllers\CustomSOPController;
+use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\MonitoringImageController;
 use App\Http\Controllers\PetHotelImageController;
 use App\Http\Controllers\SopGeneralController;
