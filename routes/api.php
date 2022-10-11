@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CancelSopController;
+use App\Http\Controllers\CustomSOPController;
 use App\Http\Controllers\SopGeneralController;
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +32,7 @@ Route::prefix('v1')->group(function() {
         Route::delete('/{id}', [SopGeneralController::class, 'delete']);
     });
 
-    Route::prefix('asuransi')->group(function() {
+    Route::prefix('fasilitas')->group(function() {
         Route::get('/', [FasilitasController::class, 'getAllList']);
         Route::get('/{id}', [FasilitasController::class, 'getDetailID']);
         Route::post('/add', [FasilitasController::class, 'add']);
@@ -45,6 +46,14 @@ Route::prefix('v1')->group(function() {
         Route::post('/add', [AsuransiController::class, 'add']);
         Route::put('/{id}', [AsuransiController::class, 'update']);
         Route::delete('/{id}', [AsuransiController::class, 'delete']);
+    });
+
+    Route::prefix('custom_sop')->group(function() {
+        Route::get('/', [CustomSOPController::class, 'getAllList']);
+        Route::get('/{id}', [CustomSOPController::class, 'getDetailID']);
+        Route::post('/add', [CustomSOPController::class, 'add']);
+        Route::put('/{id}', [CustomSOPController::class, 'update']);
+        Route::delete('/{id}', [CustomSOPController::class, 'delete']);
     });
 
 
