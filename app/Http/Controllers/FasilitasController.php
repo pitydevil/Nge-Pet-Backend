@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helper;
 use App\Http\Requests\StorefasilitasRequest;
 use App\Http\Requests\UpdatefasilitasRequest;
 use App\Models\fasilitas;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class FasilitasController extends Controller
 {
@@ -17,7 +21,7 @@ class FasilitasController extends Controller
         return response()->json([
             'status' => 200,
             'error' => null,
-            'data' => Helper::paginate($sop_general),
+            'data' => Helper::paginate($fasilitas),
         ]);
     }
 

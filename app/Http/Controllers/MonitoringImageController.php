@@ -2,85 +2,125 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helper;
 use App\Http\Requests\StoreMonitoringImageRequest;
 use App\Http\Requests\UpdateMonitoringImageRequest;
 use App\Models\MonitoringImage;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MonitoringImageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function getAllList(Request $request)
     {
-        //
+        $limit = intval($request->input('limit', 25));
+        $monitoring_image = MonitoringImage::where('monitoring_image_id', '=', $request->monitoring_image_id)
+            ->orderBy('created_at', 'DESC')
+            ->paginate($limit);
+        
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => Helper::paginate($monitoring_image),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function getDetailID(Request $request, int $id){
+        $monitoring_image = MonitoringImage::where('monitoring_image_id', '=', $id)
+            ->where('monitoring_image_id', '=', $request->monitoring_image_id)
+            ->first();
+        
+        if (!$monitoring_image)  {
+            return response()->json([
+                'status' => 404,
+                'error' => 'MONITORING_IMAGE_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
+        
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => $monitoring_image,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreMonitoringImageRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreMonitoringImageRequest $request)
-    {
-        //
+    public function add(Request $request){
+        $validator = Validator::make($request->all(), [
+            'monitoring_image_url' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        $monitoring_image = MonitoringImage::create([
+            'creation_date' => $request->post('creation_date', Carbon::now()),
+            'monitoring_image_url' => $request->post('monitoring_image_url'),
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\MonitoringImage  $monitoringImage
-     * @return \Illuminate\Http\Response
-     */
-    public function show(MonitoringImage $monitoringImage)
-    {
-        //
+    public function update(Request $request, int $id){
+        $validator = Validator::make($request->all(), [
+            'monitoring_image_url' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        $monitoring_image = MonitoringImage::where('monitoring_image_url', '=', $id)
+            ->first();
+
+        if (!$monitoring_image) return response()->json([
+            'status' => 404,
+            'error' => 'MONITORING_IMAGE_NOT_FOUND',
+            'data' => null,
+        ], 404);
+
+        $monitoring_image->monitoring_image_id = $request->post('monitoring_image_id', $monitoring_image->monitoring_image_id);
+        $monitoring_image->monitoring_image_url = $request->post('monitoring_image_url', $monitoring_image->monitoring_image_url);
+        $monitoring_image->save();
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\MonitoringImage  $monitoringImage
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(MonitoringImage $monitoringImage)
-    {
-        //
-    }
+    public function delete(Request $request, int $id){
+        $monitoring_image = MonitoringImage::where('monitoring_image_id', '=', $id)
+            ->first();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateMonitoringImageRequest  $request
-     * @param  \App\Models\MonitoringImage  $monitoringImage
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateMonitoringImageRequest $request, MonitoringImage $monitoringImage)
-    {
-        //
-    }
+        if (!$monitoring_image) {
+            return response()->json([
+                'status' => 404,
+                'error' => 'MONITORING_IMAGE_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        } 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\MonitoringImage  $monitoringImage
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(MonitoringImage $monitoringImage)
-    {
-        //
+        $monitoring_image->delete();
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 }

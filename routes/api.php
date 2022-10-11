@@ -1,9 +1,16 @@
 <?php
 
+use App\Http\Controllers\AsuransiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CancelSopController;
+use App\Http\Controllers\CustomSOPController;
+use App\Http\Controllers\FasilitasController;
+use App\Http\Controllers\MonitoringImageController;
+use App\Http\Controllers\PetHotelImageController;
 use App\Http\Controllers\SopGeneralController;
+use App\Http\Controllers\SupportedPetTypeController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,7 +38,7 @@ Route::prefix('v1')->group(function() {
         Route::delete('/{id}', [SopGeneralController::class, 'delete']);
     });
 
-    Route::prefix('asuransi')->group(function() {
+    Route::prefix('fasilitas')->group(function() {
         Route::get('/', [FasilitasController::class, 'getAllList']);
         Route::get('/{id}', [FasilitasController::class, 'getDetailID']);
         Route::post('/add', [FasilitasController::class, 'add']);
@@ -47,5 +54,36 @@ Route::prefix('v1')->group(function() {
         Route::delete('/{id}', [AsuransiController::class, 'delete']);
     });
 
+    Route::prefix('custom_sop')->group(function() {
+        Route::get('/', [CustomSOPController::class, 'getAllList']);
+        Route::get('/{id}', [CustomSOPController::class, 'getDetailID']);
+        Route::post('/add', [CustomSOPController::class, 'add']);
+        Route::put('/{id}', [CustomSOPController::class, 'update']);
+        Route::delete('/{id}', [CustomSOPController::class, 'delete']);
+    });
+
+    Route::prefix('supported_pet_type')->group(function() {
+        Route::get('/', [SupportedPetTypeController::class, 'getAllList']);
+        Route::get('/{id}', [SupportedPetTypeController::class, 'getDetailID']);
+        Route::post('/add', [SupportedPetTypeController::class, 'add']);
+        Route::put('/{id}', [SupportedPetTypeController::class, 'update']);
+        Route::delete('/{id}', [SupportedPetTypeController::class, 'delete']);
+    });
+
+    Route::prefix('monitoring_image')->group(function() {
+        Route::get('/', [MonitoringImageController::class, 'getAllList']);
+        Route::get('/{id}', [MonitoringImageController::class, 'getDetailID']);
+        Route::post('/add', [MonitoringImageController::class, 'add']);
+        Route::put('/{id}', [MonitoringImageController::class, 'update']);
+        Route::delete('/{id}', [MonitoringImageController::class, 'delete']);
+    });
+
+    Route::prefix('pet_hotel_image')->group(function() {
+        Route::get('/', [PetHotelImageController::class, 'getAllList']);
+        Route::get('/{id}', [PetHotelImageController::class, 'getDetailID']);
+        Route::post('/add', [PetHotelImageController::class, 'add']);
+        Route::put('/{id}', [PetHotelImageController::class, 'update']);
+        Route::delete('/{id}', [PetHotelImageController::class, 'delete']);
+    });
 
 });
