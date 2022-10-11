@@ -61,7 +61,7 @@ class MonitoringImageController extends Controller
 
         $monitoring_image = MonitoringImage::create([
             'creation_date' => $request->post('creation_date', Carbon::now()),
-            'custom_sop_name' => $request->post('monitoring_image_url'),
+            'monitoring_image_url' => $request->post('monitoring_image_url'),
         ]);
 
         return response()->json([

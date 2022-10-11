@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CancelSopController;
 use App\Http\Controllers\CustomSOPController;
 use App\Http\Controllers\MonitoringImageController;
+use App\Http\Controllers\PetHotelImageController;
 use App\Http\Controllers\SopGeneralController;
 use App\Http\Controllers\SupportedPetTypeController;
 
@@ -75,5 +76,12 @@ Route::prefix('v1')->group(function() {
         Route::delete('/{id}', [MonitoringImageController::class, 'delete']);
     });
 
+    Route::prefix('pet_hotel_image')->group(function() {
+        Route::get('/', [PetHotelImageController::class, 'getAllList']);
+        Route::get('/{id}', [PetHotelImageController::class, 'getDetailID']);
+        Route::post('/add', [PetHotelImageController::class, 'add']);
+        Route::put('/{id}', [PetHotelImageController::class, 'update']);
+        Route::delete('/{id}', [PetHotelImageController::class, 'delete']);
+    });
 
 });
