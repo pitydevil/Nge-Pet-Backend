@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CancelSopController;
 use App\Http\Controllers\CustomSOPController;
+use App\Http\Controllers\MonitoringImageController;
 use App\Http\Controllers\SopGeneralController;
 use App\Http\Controllers\SupportedPetTypeController;
 
@@ -64,6 +65,14 @@ Route::prefix('v1')->group(function() {
         Route::post('/add', [SupportedPetTypeController::class, 'add']);
         Route::put('/{id}', [SupportedPetTypeController::class, 'update']);
         Route::delete('/{id}', [SupportedPetTypeController::class, 'delete']);
+    });
+
+    Route::prefix('monitoring_image')->group(function() {
+        Route::get('/', [MonitoringImageController::class, 'getAllList']);
+        Route::get('/{id}', [MonitoringImageController::class, 'getDetailID']);
+        Route::post('/add', [MonitoringImageController::class, 'add']);
+        Route::put('/{id}', [MonitoringImageController::class, 'update']);
+        Route::delete('/{id}', [MonitoringImageController::class, 'delete']);
     });
 
 
