@@ -5,82 +5,144 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreMonitoringRequest;
 use App\Http\Requests\UpdateMonitoringRequest;
 use App\Models\Monitoring;
+use App\Models\MonitoringImage;
 
 class MonitoringController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+    public function getAllList(Request $request){
+        $limit = intval($request->input('limit', 25));
+        $monitoring = Monitoring::where('monitoring_id', '=', $request->monitoring_id)
+            ->with([
+            'monitoring_images:monitoring_image_id,monitoring_image_url'
+            ])
+            ->orderBy('created_at', 'DESC')
+            ->paginate($limit);
+        
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => Helper::paginate($monitoring),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function getDetailID(Request $request, int $id){
+        $monitoring = Monitoring::where('monitoring_id', '=', $id)
+            ->where('monitoring_id', '=', $request->monitoring_id)
+            ->with(['monitoring_images,monitoring_images.monitoring_image_id,monitoring_images.monitoring_image_id'])
+            ->first();
+        
+        if (!$monitoring)  {
+            return response()->json([
+                'status' => 404,
+                'error' => 'MONITORING_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
+        
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => $monitoring,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreMonitoringRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreMonitoringRequest $request)
-    {
-        //
+    public function add(Request $request){
+        $validator = Validator::make($request->all(), [
+            'monitoring_name' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        $monitoring_image = MonitoringImage::where('monitoring_image_id', '=', $request->post('monitoring_image_id'))->first();
+        if (!$monitoring_image) {
+            return response()->json([
+            'status' => 404,
+             'error' => 'MONITORING_IMAGE_NOT_FOUND', 
+             'data' => null ], 
+             404);
+        }
+
+        Monitoring::create([
+            'monitoring_image_id' => $monitoring_image->monitoring_image_id,
+            'monitoring_name'    => $request->post('monitoring_name'),
+            'creation_date'         => $request->post('creation_date', Carbon::now()),
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Monitoring  $monitoring
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Monitoring $monitoring)
-    {
-        //
+    public function update(Request $request, int $id){
+        $validator = Validator::make($request->all(), [
+            'monitoring_name' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        $monitoring = Monitoring::where('monitoring_id', '=', $id)
+        ->first();
+        $monitoring_image = MonitoringImage::where('monitoring_image_id', '=', $request->post('monitoring_image_id'))->first();
+
+        if (!$monitoring_image) {
+            return response()->json([
+                'status' => 404, 
+                'error' => 'MONITORING_IMAGE_NOT_FOUND',
+                'data' => null 
+            ], 404);
+        }
+
+        if (!$monitoring) {
+            return response()->json([
+                'status' => 404,
+                'error' => 'MONITORING_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
+
+        $monitoring->monitoring_id = $request->post('monitoring_id', $monitoring->monitoring_id );
+        $monitoring->monitoring_image_id = $request->post('monitoring_image_id', $monitoring->monitoring_image_id);
+        $monitoring->monitoring_image_url = $request->post('monitoring_image_url',  $monitoring->monitoring_image_url);
+        $monitoring->save();
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Monitoring  $monitoring
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Monitoring $monitoring)
-    {
-        //
-    }
+    public function delete(Request $request, int $id){
+        $monitoring = Monitoring::where('monitoring_id', '=', $id)
+            ->first();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateMonitoringRequest  $request
-     * @param  \App\Models\Monitoring  $monitoring
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateMonitoringRequest $request, Monitoring $monitoring)
-    {
-        //
-    }
+        if (!$monitoring) {
+            return response()->json([
+                'status' => 404,
+                'error' => 'MONITORING_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        } 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Monitoring  $monitoring
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Monitoring $monitoring)
-    {
-        //
+        $monitoring->delete();
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 }
