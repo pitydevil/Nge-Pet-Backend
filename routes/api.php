@@ -1,15 +1,17 @@
 <?php
 
-use App\Http\Controllers\AsuransiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CancelSopController;
 use App\Http\Controllers\CustomSOPController;
 use App\Http\Controllers\FasilitasController;
+use App\Http\Controllers\AsuransiController;
 use App\Http\Controllers\MonitoringImageController;
 use App\Http\Controllers\PetHotelImageController;
 use App\Http\Controllers\SopGeneralController;
 use App\Http\Controllers\SupportedPetTypeController;
+use App\Http\Controllers\MonitoringController;
+use App\Http\Controllers\SupportedPetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,20 +40,20 @@ Route::prefix('v1')->group(function() {
         Route::delete('/{id}', [SopGeneralController::class, 'delete']);
     });
 
-    Route::prefix('fasilitas')->group(function() {
-        Route::get('/', [FasilitasController::class, 'getAllList']);
-        Route::get('/{id}', [FasilitasController::class, 'getDetailID']);
-        Route::post('/add', [FasilitasController::class, 'add']);
-        Route::put('/{id}', [FasilitasController::class, 'update']);
-        Route::delete('/{id}', [FasilitasController::class, 'delete']);
-    });
-
     Route::prefix('asuransi')->group(function() {
         Route::get('/', [AsuransiController::class, 'getAllList']);
         Route::get('/{id}', [AsuransiController::class, 'getDetailID']);
         Route::post('/add', [AsuransiController::class, 'add']);
         Route::put('/{id}', [AsuransiController::class, 'update']);
         Route::delete('/{id}', [AsuransiController::class, 'delete']);
+    });
+    
+    Route::prefix('fasilitas')->group(function() {
+        Route::get('/', [FasilitasController::class, 'getAllList']);
+        Route::get('/{id}', [FasilitasController::class, 'getDetailID']);
+        Route::post('/add', [FasilitasController::class, 'add']);
+        Route::put('/{id}', [FasilitasController::class, 'update']);
+        Route::delete('/{id}', [FasilitasController::class, 'delete']);
     });
 
     Route::prefix('custom_sop')->group(function() {
@@ -86,4 +88,19 @@ Route::prefix('v1')->group(function() {
         Route::delete('/{id}', [PetHotelImageController::class, 'delete']);
     });
 
+    Route::prefix('monitoring')->group(function() {
+        Route::get('/', [MonitoringController::class, 'getAllList']);
+        Route::get('/{id}', [MonitoringController::class, 'getDetailID']);
+        Route::post('/add', [MonitoringController::class, 'add']);
+        Route::put('/{id}', [MonitoringController::class, 'update']);
+        Route::delete('/{id}', [MonitoringController::class, 'delete']);
+    });
+
+    Route::prefix('supported_pet')->group(function() {
+        Route::get('/', [SupportedPetController::class, 'getAllList']);
+        Route::get('/{id}', [SupportedPetController::class, 'getDetailID']);
+        Route::post('/add', [SupportedPetController::class, 'add']);
+        Route::put('/{id}', [SupportedPetController::class, 'update']);
+        Route::delete('/{id}', [SupportedPetController::class, 'delete']);
+    });
 });
