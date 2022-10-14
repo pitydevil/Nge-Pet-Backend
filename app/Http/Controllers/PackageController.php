@@ -20,7 +20,8 @@ class PackageController extends Controller
         $package = Package::where('package_id', '=', $request->package_id)
             ->with([
                 'fasilitas:fasilitas_id,fasilitas_name,fasilitas_description',
-                'supported_pets:supported_pet_id,supported_pet_name,supported_pet_type_id'
+                'supported_pets:supported_pet_id,supported_pet_name,supported_pet_type_id',
+                'supported_pet_types:supported_pet_type_id,supported_pet_type_name',
             ])
             ->orderBy('created_at', 'DESC')
             ->paginate($limit);
@@ -37,7 +38,8 @@ class PackageController extends Controller
             ->where('package_id', '=', $request->package_id)
             ->with([
                 'fasilitas,fasilitas.fasilitas.fasilitas_id,fasilitas.fasilitas_name,fasilitas.fasilitas_description',
-                'supported_pets,supported_pets.supported_pet_id,supported_pets.supported_pet_name, supported_pets.supported_pet_type_id'
+                'supported_pets,supported_pets.supported_pet_id,supported_pets.supported_pet_name, supported_pets.supported_pet_type_id',
+                'supported_pet_types,supported_pet_types.supported_pet_type_id,supported_pet_types.supported_pet_type_name'
                 ])
             ->first();
         
@@ -178,5 +180,5 @@ class PackageController extends Controller
         ]);
     }
 
-    
+
 }

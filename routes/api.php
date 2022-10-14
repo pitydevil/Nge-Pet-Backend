@@ -12,6 +12,7 @@ use App\Http\Controllers\SopGeneralController;
 use App\Http\Controllers\SupportedPetTypeController;
 use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PetHotelController;
 use App\Http\Controllers\SupportedPetController;
 
 /*
@@ -111,5 +112,13 @@ Route::prefix('v1')->group(function() {
         Route::post('/add', [PackageController::class, 'add']);
         Route::put('/{id}', [PackageController::class, 'update']);
         Route::delete('/{id}', [PackageController::class, 'delete']);
+    });
+
+    Route::prefix('pet_hotel')->group(function() {
+        Route::get('/', [PetHotelController::class, 'getAllList']);
+        Route::get('/{id}', [PetHotelController::class, 'getDetailID']);
+        Route::post('/add', [PetHotelController::class, 'add']);
+        Route::put('/{id}', [PetHotelController::class, 'update']);
+        Route::delete('/{id}', [PetHotelController::class, 'delete']);
     });
 });
