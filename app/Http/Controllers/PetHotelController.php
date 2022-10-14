@@ -2,85 +2,326 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helper;
 use App\Http\Requests\StorePetHotelRequest;
 use App\Http\Requests\UpdatePetHotelRequest;
+use App\Models\Asuransi;
+use App\Models\CancelSOP;
+use App\Models\Fasilitas;
+use App\Models\Package;
 use App\Models\PetHotel;
+use App\Models\PetHotelImage;
+use App\Models\SOPGeneral;
+use App\Models\SupportedPet;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PetHotelController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function getAllList(Request $request)
     {
-        //
+        $limit = intval($request->input('limit', 25));
+        $pet_hotel = PetHotel::where('pet_hotel_id', '=', $request->pet_hotel_id)
+            ->with([
+                'sop_generals:sop_generals_id,sop_general_description,sop_generals_asuransi',
+                'asuransis:asuransi_id,asuransi_name',
+                'packages:package_id,fasilitas_id,supported_pet_id,package_price',
+                'fasilitas:fasilitas_id,fasilitas_name,fasilitas_description',
+                'cancel_sops:cancel_sops_id,cancel_sops_description',
+                'supported_pets:supported_pet_id,supported_pet_name,supported_pet_type_id',
+                'supported_pet_types:supported_pet_type_id,supported_pet_type_name',
+                'pet_hotel_images:pet_hotel_image_id,pet_hotel_image_url',
+            ])
+            ->orderBy('created_at', 'DESC')
+            ->paginate($limit);
+        
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => Helper::paginate($pet_hotel),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function getDetailID(Request $request, int $id){
+        $pet_hotel = PetHotel::where('pet_hotel_id', '=', $id)
+            ->where('pet_hotel_id', '=', $request->pet_hotel_id)
+            ->with([
+                'sop_generals,sop_generals.sop_generals_id,sop_generals.sop_generals_description,sop_generals.sop_generals_asuransi',
+                'asuransis,asuransis.asuransi_id,asuransis.asuransi_name',
+                'packages,packages.package_id,packages.fasilitas_id,packages.supported_pet_id,packages.package_price',
+                'fasilitas,fasilitas.fasilitas.fasilitas_id,fasilitas.fasilitas_name,fasilitas.fasilitas_description',
+                'cancel_sops,cancel_sops.cancel_sops_id,cancel_sops.cancel_sops_description',
+                'supported_pets,supported_pets.supported_pet_id,supported_pets.supported_pet_name, supported_pets.supported_pet_type_id',
+                'supported_pet_types:supported_pet_type_id,supported_pet_type_name',
+                'pet_hotel_images,pet_hotel_images.pet_hotel_image_id,pet_hotel_image_url',
+                ])
+            ->first();
+        
+        if (!$pet_hotel)  {
+            return response()->json([
+                'status' => 404,
+                'error' => 'PET_HOTEL_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
+        
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => $pet_hotel,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StorePetHotelRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StorePetHotelRequest $request)
-    {
-        //
+    public function add(Request $request){
+        $validator = Validator::make($request->all(), [
+            'pet_hotel_name' => 'required|string',
+            'pet_hotel_longitude' => 'required|double',
+            'pet_hotel_latitude' => 'required|double',
+            'pet_hotel_location' => 'required|string',
+            'pet_hotel_description' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+
+        $sop_general = SOPGeneral::where('sop_generals_id', '=', $request->post('sop_generals_id'))->first();
+ 
+        if (!$sop_general) {
+            return response()->json([
+            'status' => 404,
+             'error' => 'SOP_GENERAL_ID_NOT_FOUND', 
+             'data' => null ], 
+             404);
+        }
+
+        $asuransi = Asuransi::where('asuransi_id', '=', $request->post('asuransi_id'))->first();
+ 
+        if (!$asuransi) {
+            return response()->json([
+            'status' => 404,
+             'error' => 'ASURANSI_ID_NOT_FOUND', 
+             'data' => null ], 
+             404);
+        }
+
+
+        $package = Package::where('package_id', '=', $request->post('package_id'))->first();
+ 
+        if (!$package) {
+            return response()->json([
+            'status' => 404,
+             'error' => 'PACKAGES_ID_NOT_FOUND', 
+             'data' => null ], 
+             404);
+        }
+
+        $fasilitas = Fasilitas::where('fasilitas_id', '=', $request->post('fasilitas_id'))->first();
+ 
+        if (!$fasilitas) {
+            return response()->json([
+            'status' => 404,
+             'error' => 'FASILITAS_ID_NOT_FOUND', 
+             'data' => null ], 
+             404);
+        }
+
+
+        $cancel_sop = CancelSOP::where('cancel_sops_id', '=', $request->post('cancel_sops_id'))->first();
+ 
+        if (!$cancel_sop) {
+            return response()->json([
+            'status' => 404,
+             'error' => 'CANCEL_SOP_ID_NOT_FOUND', 
+             'data' => null ], 
+             404);
+        }
+
+        $supported_pet = SupportedPet::where('supported_pet_id', '=', $request->post('supported_pet_id'))->first();
+
+        if (!$supported_pet) {
+            return response()->json([
+            'status' => 404,
+             'error' => 'SUPPORTED_PET_ID_NOT_FOUND', 
+             'data' => null ], 
+             404);
+        }
+
+        $pet_hotel_image = PetHotelImage::where('pet_hotel_image_id', '=', $request->post('pet_hotel_image_id'))->first();
+
+        if (!$pet_hotel_image) {
+            return response()->json([
+            'status' => 404,
+             'error' => 'PET_HOTEL_IMAGE_ID_NOT_FOUND', 
+             'data' => null ], 
+             404);
+        }
+
+       PetHotel::create([
+            'creation_date' => $request->post('creation_date', Carbon::now()),
+            'sop_generals_id' => $sop_general->sop_generals_id,
+            'asuransi_id' => $asuransi->asuransi_id,
+            'package_id' => $package->package_id,
+            'fasilitas_id' => $fasilitas->fasilitas_id,
+            'cancel_sops_id' => $cancel_sop->cancel_sops_id,
+            'supported_pet_id' => $fasilitas->supported_pet_id,
+            'pet_hotel_name' => $request->post('pet_hotel_name'),
+            'pet_hotel_longitude' => $request->post('pet_hotel_longitude'),
+            'pet_hotel_latitude' => $request->post('latitude'),
+            'pet_hotel_location' => $request->post('pet_hotel_location'),
+            'pet_hotel_description' => $request->post('pet_hotel_description'),
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\PetHotel  $petHotel
-     * @return \Illuminate\Http\Response
-     */
-    public function show(PetHotel $petHotel)
-    {
-        //
+    public function update(Request $request, int $id){
+        $validator = Validator::make($request->all(), [
+            'pet_hotel_name' => 'required|string',
+            'pet_hotel_longitude' => 'required|double',
+            'pet_hotel_latitude' => 'required|double',
+            'pet_hotel_location' => 'required|string',
+            'pet_hotel_description' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        $pet_hotel = PetHotel::where('pet_hotel_id', '=', $id)
+            ->first();
+
+        $sop_general = SOPGeneral::where('sop_generals_id', '=', $request->post('sop_generals_id'))->first();
+ 
+        if (!$sop_general) {
+            return response()->json([
+            'status' => 404,
+             'error' => 'SOP_GENERAL_NOT_FOUND', 
+             'data' => null ], 
+             404);
+        }
+
+        $asuransi = Asuransi::where('asuransi_id', '=', $request->post('asuransi_id'))->first();
+ 
+        if (!$asuransi) {
+            return response()->json([
+            'status' => 404,
+             'error' => 'ASURANSI_NOT_FOUND', 
+             'data' => null ], 
+             404);
+        }
+
+
+        $package = Package::where('package_id', '=', $request->post('package_id'))->first();
+ 
+        if (!$package) {
+            return response()->json([
+            'status' => 404,
+             'error' => 'PACKAGES_NOT_FOUND', 
+             'data' => null ], 
+             404);
+        }
+
+        $fasilitas = Fasilitas::where('fasilitas_id', '=', $request->post('fasilitas_id'))->first();
+
+        if (!$fasilitas) {
+            return response()->json([
+                'status' => 404, 
+                'error' => 'FASILITAS_NOT_FOUND',
+                'data' => null 
+            ], 404);
+        }
+
+        $cancel_sop = CancelSOP::where('cancel_sops_id', '=', $request->post('cancel_sops_id'))->first();
+ 
+        if (!$cancel_sop) {
+            return response()->json([
+            'status' => 404,
+             'error' => 'CANCEL_SOP_NOT_FOUND', 
+             'data' => null ], 
+             404);
+        }
+
+        $supported_pet = SupportedPet::where('supported_pet_id', '=', $request->post('supported_pet_id'))->first();
+
+        if (!$supported_pet) {
+            return response()->json([
+                'status' => 404, 
+                'error' => 'SUPPORTED_PET_NOT_FOUND',
+                'data' => null 
+            ], 404);
+        }
+
+        $pet_hotel_image = PetHotelImage::where('pet_hotel_image_id', '=', $request->post('pet_hotel_image_id'))->first();
+
+        if (!$pet_hotel_image) {
+            return response()->json([
+            'status' => 404,
+             'error' => 'PET_HOTEL_IMAGE_NOT_FOUND', 
+             'data' => null ], 
+             404);
+        }
+
+        if (!$pet_hotel) return response()->json([
+            'status' => 404,
+            'error' => 'PET_HOTEL_NOT_FOUND',
+            'data' => null,
+        ], 404);
+
+        $pet_hotel->package_id = $request->post('package_id', $pet_hotel->package_id);
+        $pet_hotel->sop_generals_id = $request->post('sop_generals_id', $pet_hotel->sop_generals_id);
+        $pet_hotel->asuransi_id = $request->post('asuransi_id', $pet_hotel->asuransi_id);
+        $pet_hotel->package_id = $request->post('package_id', $pet_hotel->package_id);
+        $pet_hotel->cancel_sops_id = $request->post('cancel_sops_id', $pet_hotel->cancels_sops_id);
+        $pet_hotel->fasilitas_id = $request->post('fasilitas_id', $pet_hotel->fasilitas_id);
+        $pet_hotel->supported_pet_id = $request->post('supported_pet_id', $pet_hotel->supported_pet_id);
+        $pet_hotel->pet_hotel_image_id = $request->post('pet_hotel_image_id', $pet_hotel->pet_hotel_image_id);
+        $pet_hotel->pet_hotel_name = $request->post('pet_hotel_name', $package->pet_hotel_name);
+        $pet_hotel->pet_hotel_longitude = $request->post('pet_hotel_longitude', $package->pet_hotel_longitude);
+        $pet_hotel->pet_hotel_latitude = $request->post('pet_hotel_latitude', $package->pet_hotel_latitude);
+        $pet_hotel->pet_hotel_location = $request->post('pet_hotel_location', $package->pet_hotel_location);
+        $pet_hotel->pet_hotel_name = $request->post('pet_hotel_name', $package->pet_hotel_name);
+        $pet_hotel->pet_hotel_description = $request->post('pet_hotel_description', $package->pet_hotel_description);
+        $pet_hotel->save();
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\PetHotel  $petHotel
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(PetHotel $petHotel)
-    {
-        //
-    }
+    public function delete(Request $request, int $id){
+        $pet_hotel = PetHotel::where('pet_hotel_id', '=', $id)
+            ->first();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatePetHotelRequest  $request
-     * @param  \App\Models\PetHotel  $petHotel
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdatePetHotelRequest $request, PetHotel $petHotel)
-    {
-        //
-    }
+        if (!$pet_hotel) {
+            return response()->json([
+                'status' => 404,
+                'error' => 'PET_HOTEL_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        } 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\PetHotel  $petHotel
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(PetHotel $petHotel)
-    {
-        //
+        $pet_hotel->delete();
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
     }
 }
