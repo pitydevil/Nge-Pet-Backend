@@ -11,6 +11,8 @@ use App\Http\Controllers\PetHotelImageController;
 use App\Http\Controllers\SopGeneralController;
 use App\Http\Controllers\SupportedPetTypeController;
 use App\Http\Controllers\MonitoringController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PetHotelController;
 use App\Http\Controllers\SupportedPetController;
@@ -120,5 +122,21 @@ Route::prefix('v1')->group(function() {
         Route::post('/add', [PetHotelController::class, 'add']);
         Route::put('/{id}', [PetHotelController::class, 'update']);
         Route::delete('/{id}', [PetHotelController::class, 'delete']);
+    });
+
+    Route::prefix('order')->group(function() {
+        Route::get('/', [OrderController::class, 'getAllList']);
+        Route::get('/{id}', [OrderController::class, 'getDetailID']);
+        Route::post('/add', [OrderController::class, 'add']);
+        Route::put('/{id}', [OrderController::class, 'update']);
+        Route::delete('/{id}', [OrderController::class, 'delete']);
+    });
+
+    Route::prefix('order_detail')->group(function() {
+        Route::get('/', [OrderDetailController::class, 'getAllList']);
+        Route::get('/{id}', [OrderDetailController::class, 'getDetailID']);
+        Route::post('/add', [OrderDetailController::class, 'add']);
+        Route::put('/{id}', [OrderDetailController::class, 'update']);
+        Route::delete('/{id}', [OrderDetailController::class, 'delete']);
     });
 });
