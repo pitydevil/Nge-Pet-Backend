@@ -6,6 +6,7 @@ use App\Http\Controllers\CancelSopController;
 use App\Http\Controllers\CustomSOPController;
 use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\AsuransiController;
+use App\Http\Controllers\ExploreController;
 use App\Http\Controllers\MonitoringImageController;
 use App\Http\Controllers\PetHotelImageController;
 use App\Http\Controllers\SopGeneralController;
@@ -139,4 +140,8 @@ Route::prefix('v1')->group(function() {
         Route::put('/{id}', [OrderDetailController::class, 'update']);
         Route::delete('/{id}', [OrderDetailController::class, 'delete']);
     });
+});
+
+Route::prefix('explore')->group(function() {
+    Route::get('/get-all-list', [ExploreController::class, 'getAllList']);
 });
