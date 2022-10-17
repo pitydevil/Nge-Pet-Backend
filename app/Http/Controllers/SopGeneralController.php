@@ -117,6 +117,9 @@ class SopGeneralController extends Controller
         } 
 
         $sop_general->delete();
+
+
+        // tambahin validasi ketika id nya sudah dipake, jadi tidak bisa delete
         return response()->json([
             'status' => 200,
             'error' => null,
