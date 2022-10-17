@@ -14,20 +14,17 @@ class SopGeneralController extends Controller
 {   
     public function getAllList(Request $request){
         $limit = intval($request->input('limit', 25));
-        $sop_general = SOPGeneral::where('sop_generals_id', '=', $request->sop_generals_id)
-            ->orderBy('created_at', 'DESC')
-            ->paginate($limit);
+        $sop_general = SOPGeneral::all();
         
         return response()->json([
             'status' => 200,
             'error' => null,
-            'data' => Helper::paginate($sop_general),
+            'data' => $sop_general,
         ]);
     }
 
-    public function getDetailID(Request $request, int $id){
+    public function getDetailID($id){
         $sop_general = SOPGeneral::where('sop_generals_id', '=', $id)
-            ->where('sop_generals_id', '=', $request->sop_generals_id)
             ->first();
         
         if (!$sop_general)  {
@@ -107,7 +104,7 @@ class SopGeneralController extends Controller
         ]);
     }
 
-    public function delete(Request $request, int $id){
+    public function delete($id){
         $sop_general = SOPGeneral::where('sop_generals_id', '=', $id)
             ->first();
 
