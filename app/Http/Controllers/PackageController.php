@@ -94,7 +94,7 @@ class PackageController extends Controller
        Package::create([
             'creation_date' => $request->post('creation_date', Carbon::now()),
             'fasilitas_id' => $fasilitas->fasilitas_id,
-            'supported_pet_id' => $fasilitas->supported_pet_id,
+            'supported_pet_id' => $supported_pet->supported_pet_id,
             'package_price' => $request->post('package_price'),
         ]);
 
