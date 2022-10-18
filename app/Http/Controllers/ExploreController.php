@@ -7,14 +7,26 @@ use Illuminate\Http\Request;
 
 class ExploreController extends Controller
 {
-    public function getAllList(Request $request)
-    {
-        $pet_hotel = PetHotel::all();
-        
+    // public function getAllList(Request $request)
+    // {
+
+    //     $pet_hotel = PetHotel::all();
+
+    //     // dd($pet_hotel);
+
+    //     return response()->json([
+    //         $request ->all(),
+    //     ]);
+    // }
+
+    public function getNearestList(Request $request){
+        $longitude          = $request->longitude;
+        $latitude           = $request->latitude;
+        $nearest_pet_hotel  = PetHotel::where('longitude', $longitude)->where('latitude', $latitude)->get();
+
         return response()->json([
-            'status' => 200,
-            'error' => null,
-            'data' => $pet_hotel,
+            $nearest_pet_hotel
         ]);
+
     }
 }
