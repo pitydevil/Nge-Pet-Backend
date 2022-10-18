@@ -16,6 +16,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PetHotelController;
+use App\Http\Controllers\Reservation;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\SupportedPetController;
 
 /*
@@ -144,4 +146,8 @@ Route::prefix('v1')->group(function() {
 
 Route::prefix('explore')->group(function() {
     Route::get('/get-all-list', [ExploreController::class, 'getAllList']);
+});
+
+Route::prefix('reservation')->group(function() {
+    Route::get('/get_detail_pet_hotel/{id}', [ReservationController::class, 'getPetHotelDetail']);
 });
