@@ -54,7 +54,7 @@ Route::prefix('v1')->group(function() {
         Route::put('/{id}', [AsuransiController::class, 'update']);
         Route::delete('/{id}', [AsuransiController::class, 'delete']);
     });
-    
+
     Route::prefix('fasilitas')->group(function() {
         Route::get('/', [FasilitasController::class, 'getAllList']);
         Route::get('/{id}', [FasilitasController::class, 'getDetailID']);
@@ -145,7 +145,9 @@ Route::prefix('v1')->group(function() {
 });
 
 Route::prefix('explore')->group(function() {
-    Route::get('/get-all-list', [ExploreController::class, 'getAllList']);
+    // Route::post('/get-all-list', [ExploreController::class, 'getAllList']);
+    // Route::post('/generatePenilaian', [PenilaianController::class, 'generatePenilaian'])->name('penilaian.generate');
+    Route::post('/get-nearest-list',[ExploreController::class, 'getNearestList']);
 });
 
 Route::prefix('reservation')->group(function() {
