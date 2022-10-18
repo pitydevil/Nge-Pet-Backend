@@ -22,7 +22,7 @@ class ExploreController extends Controller
     public function getNearestList(Request $request){
         $longitude          = $request->longitude;
         $latitude           = $request->latitude;
-        $nearest_pet_hotel  = PetHotel::where('longitude', $longitude)->where('latitude', $latitude)->get();
+        $nearest_pet_hotel  = PetHotel::where('pet_hotel_longitude', $longitude)->where('pet_hotel_latitude', $latitude)->get();
 
         return response()->json([
             $nearest_pet_hotel
