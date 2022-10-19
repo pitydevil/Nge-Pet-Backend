@@ -8,13 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class CustomSOP extends Model
 {
     use HasFactory;
+    
     protected $table='custom_sops';
 
     protected $primaryKey = 'custom_sop_id';
-    protected $fillable = ['custom_sop_name'];
+    protected $fillable = ['custom_sop_name', 'order_detail_id', 'monitoring_id'];
     protected $hidden = ['created_at', 'updated_at'];
 
-    public function orderDetail() {
-        return $this->belongsTo(OrderDetail::class, 'custom_sop_id', 'custom_sop_id');
+    public function orderDetail()
+    {
+        return $this->belongsTo('App\Models\OrderDetail', 'order_detail_id');
+    }
+
+    public function monitoring()
+    {
+        return $this->belongsTo('App\Models\Monitoring', 'monitoring_id');
     }
 }

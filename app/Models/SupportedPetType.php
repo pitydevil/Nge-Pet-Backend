@@ -14,7 +14,8 @@ class SupportedPetType extends Model
     protected $fillable = ['ssupported_pet_type_name'];
     protected $hidden = ['created_at', 'updated_at'];
 
-    public function supportedPet() {
-        return $this->belongsTo(supportedPet::class, 'supported_pet_type_id', 'supported_pet_type_id');
+    public function supportedPet()
+    {
+        return $this->hasMany('App\Models\SupportedPet');
     }
 }

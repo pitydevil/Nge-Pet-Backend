@@ -12,30 +12,46 @@ class PetHotel extends Model
     protected $table='pet_hotels';
 
     protected $primaryKey = 'pet_hotel_id';
-    protected $fillable = ['pet_hotel_name', 'pet_hotel_longitude','pet_hotel_latitude', 'pet_hotel_location', 'pet_hotel_description','sop_generals_id', 'asuransi_id', 'package_id', 'cancel_sops_id', 'fasilitas_id', 'supported_pet_id', 'pet_hotel_image_id'];
-    protected $hidden = ['sop_generals_id', 'asuransi_id', 'package_id', 'cancel_sops_id', 'fasilitas_id', 'supported_pet_id', 'pet_hotel_image_id', 'created_at', 'updated_at'];
+    protected $fillable = ['pet_hotel_name', 'pet_hotel_description', 'pet_hotel_longitude','pet_hotel_latitude', 'pet_hotel_address', 'pet_hotel_kelurahan', 'pet_hotel_kecamatan', 'pet_hotel_kota', 'pet_hotel_provinsi', 'pet_hotel_pos'];
+    protected $hidden = ['created_at', 'updated_at'];
 
-    public function sopGeneral() {
-        return $this->hasMany(SOPGeneral::class, 'sop_generals_id', 'sop_generals_id');
+    public function asuransi()
+    {
+        return $this->hasMany('App\Models\Asuransi');
     }
 
-    public function cancelSOP() {
-        return $this->hasMany(CancelSOP::class, 'cancel_sops_id', 'cancel_sops_id');
+    public function cancelSOP()
+    {
+        return $this->hasMany('App\Models\CancelSOP');
     }
 
-    public function asuransi() {
-        return $this->hasMany(Asuransi::class, 'asuransi_id', 'asuransi_id');
+    public function fasilitas()
+    {
+        return $this->hasMany('App\Models\Fasilitas');
     }
 
-    public function supportedPet() {
-        return $this->hasMany(SupportedPet::class, 'supported_pet_id', 'supported_pet_id');
+    public function order()
+    {
+        return $this->hasMany('App\Models\Order');
     }
 
-    public function fasilitas() {
-        return $this->hasMany(Fasilitas::class, 'fasilitas_id', 'fasilitas_id');
+    public function package()
+    {
+        return $this->hasMany('App\Models\Package');
     }
 
-    public function petHotelImage() {
-        return $this->hasMany(PetHotelImage::class, 'pet_hotel_image_id', 'pet_hotel_image_id');
+    public function petHotelImage()
+    {
+        return $this->hasMany('App\Models\PetHotelImage');
+    }
+
+    public function sopGeneral()
+    {
+        return $this->hasMany('App\Models\SOPGeneral');
+    }
+
+    public function supportedPet()
+    {
+        return $this->hasMany('App\Models\SupportedPet');
     }
 }
