@@ -12,14 +12,21 @@ class Monitoring extends Model
     protected $table='monitorings';
 
     protected $primaryKey = 'monitoring_id';
-    protected $fillable = ['monitoring_name', 'monitoring_image_id'];
-    protected $hidden = ['monitoring_image_id', 'created_at', 'updated_at'];
+    protected $fillable = ['monitoring_activity', 'order_detail_id'];
+    protected $hidden = ['created_at', 'updated_at'];
 
-    public function monitoring_image() {
-        return $this->hasMany(MonitoringImage::class, 'monitoring_image_id', 'monitoring_image_id');
+    public function orderDetail()
+    {
+        return $this->belongsTo('App\Models\OrderDetail', 'order_detail_id');
     }
 
-    public function orderDetail() {
-        return $this->belongsTo(OrderDetail::class, 'monitoring_id', 'monitoring_id');
+    public function customSOP()
+    {
+        return $this->hasMany('App\Models\CustomSOP');
+    }
+
+    public function monitoringImage()
+    {
+        return $this->hasMany('App\Models\MonitoringImage');
     }
 }

@@ -12,14 +12,26 @@ class Package extends Model
     protected $table='packages';
 
     protected $primaryKey = 'package_id';
-    protected $fillable = ['fasilitas_id', 'supported_pet_id', 'package_price'];
-    protected $hidden = ['fasilitas_id', 'supported_pet_id', 'created_at', 'updated_at'];
+    protected $fillable = ['package_name', 'package_price', 'pet_hotel_id', 'supported_pet_id'];
+    protected $hidden = ['created_at', 'updated_at'];
 
-    public function fasilitas() {
-        return $this->hasMany(Fasilitas::class, 'fasilitas_id', 'fasilitas_id');
+    public function petHotel()
+    {
+        return $this->belongsTo('App\Models\PetHotel', 'pet_hotel_id');
     }
 
-    public function supportedPet() {
-        return $this->hasMany(SupportedPet::class, 'supported_pet_id', 'supported_pet_id');
+    public function supportedPet()
+    {
+        return $this->belongsTo('App\Models\SupportedPet', 'supported_pet_id');
+    }
+
+    public function orderDetail()
+    {
+        return $this->hasMany('App\Models\OrderDetail');
+    }
+
+    public function packageDetail()
+    {
+        return $this->hasMany('App\Models\PackageDetail');
     }
 }

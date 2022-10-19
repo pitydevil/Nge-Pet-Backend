@@ -12,10 +12,16 @@ class Order extends Model
     protected $table='orders';
 
     protected $primaryKey = 'order_id';
-    protected $fillable = ['order_name', 'order_status','order_date_checkin', 'order_date_checkout', 'user_id','pet_hotel_id'];
-    protected $hidden = ['order_date_checkin', 'order_date_checkout','user_id', 'pet_hotel_id', 'created_at', 'updated_at'];
+    protected $fillable = ['order_code', 'order_date_checkin','order_date_checkout', 'order_total_price', 'order_status','user_id', 'pet_hotel_id'];
+    protected $hidden = ['created_at', 'updated_at'];
 
-    public function orderDetail() {
-        return $this->hasMany(OrderDetail::class, 'order_detail_id', 'order_detail_id');
+    public function petHotel()
+    {
+        return $this->belongsTo('App\Models\PetHotel', 'pet_hotel_id');
+    }
+
+    public function orderDetail()
+    {
+        return $this->hasMany('App\Models\OrderDetail');
     }
 }
