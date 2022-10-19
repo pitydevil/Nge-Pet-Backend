@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('monitorings', function (Blueprint $table) {
-            $table->id('monitoring_id')->index();
-            $table->longText('monitoring_name');
-            $table->foreignId('monitoring_image_id')->constrained('monitoring_images', 'monitoring_image_id')->cascadeOnUpdate()->restrictOnDelete();
+        Schema::create('cancel_sops', function (Blueprint $table) {
+            $table->id('cancel_sops_id');
+            $table->longText('cancel_sops_description');
+            $table->foreignId('pet_hotel_id')->constrained('pet_hotels', 'pet_hotel_id')->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('monitorings');
+        Schema::dropIfExists('cancel_sops');
     }
 };

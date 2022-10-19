@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('custom_sops', function (Blueprint $table) {
-            $table->id("custom_sop_id")->index();
-            $table->longText("custom_sop_name");
+        Schema::create('package_details', function (Blueprint $table) {
+            $table->id('package_detail_id');
+            $table->longText('package_detail_name');
+            $table->foreignId('package_id')->constrained('packages', 'package_id')->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('custom_sops');
+        Schema::dropIfExists('package_details');
     }
 };

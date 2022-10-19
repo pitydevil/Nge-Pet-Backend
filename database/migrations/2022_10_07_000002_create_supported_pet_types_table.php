@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('monitoring_images', function (Blueprint $table) {
-            $table->id("monitoring_image_id")->index();
-            $table->string("monitoring_image_url");
+        Schema::create('supported_pet_types', function (Blueprint $table) {
+            $table->id("supported_pet_type_id");
+            $table->longText("supported_pet_type_name");
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('monitoring_images');
+        Schema::dropIfExists('supported_pet_types');
     }
 };
