@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('asuransis', function (Blueprint $table) {
-            $table->id('asuransi_id')->index();
-            $table->longText('asuransi_name');
+        Schema::create('sop_generals', function (Blueprint $table) {
+            $table->id('sop_generals_id');
+            $table->longText('sop_generals_description');
+            $table->foreignId('pet_hotel_id')->constrained('pet_hotels', 'pet_hotel_id')->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asuransis');
+        Schema::dropIfExists('sop_generals');
     }
 };

@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('supported_pet_types', function (Blueprint $table) {
-            $table->id("supported_pet_type_id")->index();
-            $table->longText("supported_pet_type_name");
+        Schema::create('fasilitas', function (Blueprint $table) {
+            $table->id('fasilitas_id');
+            $table->longText('fasilitas_name');
+            $table->longText('fasilitas_icon_url');
+            $table->longText('fasilitas_status');
+            $table->foreignId('pet_hotel_id')->constrained('pet_hotels', 'pet_hotel_id')->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('supported_pet_types');
+        Schema::dropIfExists('fasilitas');
     }
 };
