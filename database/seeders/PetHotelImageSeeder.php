@@ -16,7 +16,14 @@ class PetHotelImageSeeder extends Seeder
     public function run()
     {
         PetHotelImage::create([
-            'pet_hotel_image_url'=> 'url-image',
+            'pet_hotel_image_id' => 1,
+            'pet_hotel_image_url'=> 'url-image-1',
+            'pet_hotel_id'=> 1,
+        ]);
+        PetHotelImage::create([
+            'pet_hotel_image_id' => 2,
+            'pet_hotel_image_url'=> 'url-image-2',
+            'pet_hotel_id'=> 1,
         ]);
     }
 }

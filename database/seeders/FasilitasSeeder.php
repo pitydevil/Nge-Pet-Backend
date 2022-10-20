@@ -18,16 +18,22 @@ class FasilitasSeeder extends Seeder
     {
 
         Fasilitas::create([
-            'fasilitas_name' => 'Kandang Anjing', 
-            'fasilitas_description' => 'Fasilitas kami dilengkapin dengan kandang anjing yang luas.'
+            'fasilitas_name' => 'Kandang Anjing',
+            'fasilitas_icon_url' => 'contoh-url',
+            'fasilitas_status' => 'tersedia',
+            'pet_hotel_id' => 1,
         ]);
         Fasilitas::create([
-            'fasilitas_name' => 'Kandang Kucing', 
-            'fasilitas_description' => 'Fasilitas kami dilengkapin dengan kandang kucing yang luas.'
+            'fasilitas_name' => 'Kandang Kucing',
+            'fasilitas_icon_url' => 'contoh-url',
+            'fasilitas_status' => 'tersedia',
+            'pet_hotel_id' => 1, 
         ]);
         Fasilitas::create([
-            'fasilitas_name' => 'Tempat Bermain', 
-            'fasilitas_description' => 'Fasilitas kami dilengkapin dengan tempat bermain yang luas.'
+            'fasilitas_name' => 'Tempat Bermain',
+            'fasilitas_icon_url' => 'contoh-url',
+            'fasilitas_status' => 'tersedia',
+            'pet_hotel_id' => 1, 
         ]);
     }
 }

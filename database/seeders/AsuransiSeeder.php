@@ -16,13 +16,16 @@ class AsuransiSeeder extends Seeder
     public function run()
     {
         Asuransi::create([
-            'asuransi_name' => 'Pertanggung jawaban pertama saat hewan anda mengalami kecelakaan.'
+            'asuransi_description' => 'Pertanggung jawaban pertama saat hewan anda mengalami kecelakaan.',
+            'pet_hotel_id'=> 1,
         ]);
         Asuransi::create([
-            'asuransi_name' => 'Hewan anda dijamin memiliki kesahjeteraan yang sangat mumpuni.'
+            'asuransi_description' => 'Hewan anda dijamin memiliki kesahjeteraan yang sangat mumpuni.',
+            'pet_hotel_id'=> 1,
         ]);
         Asuransi::create([
-            'asuransi_name' => 'Jaminan kesehatan dan tenaga ahli selama 24 jam.'
+            'asuransi_description' => 'Jaminan kesehatan dan tenaga ahli selama 24 jam.',
+            'pet_hotel_id'=> 1,
         ]);
     }
 }

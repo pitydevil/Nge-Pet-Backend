@@ -16,13 +16,16 @@ class CancelSopSeeder extends Seeder
     public function run()
     {
         CancelSOP::create([
-            'cancel_sops_description' => 'Uang anda dijamin balik saat anda melakukan pembatalan dalam h-24jam.'
+            'cancel_sops_description' => 'Uang anda dijamin balik saat anda melakukan pembatalan dalam h-24jam.',
+            'pet_hotel_id'=> 1,
         ]);
         CancelSOP::create([
-            'cancel_sops_description' => 'Anda tidak akan mendapatkan denda saat melakukan pembatalan.'
+            'cancel_sops_description' => 'Anda tidak akan mendapatkan denda saat melakukan pembatalan.',
+            'pet_hotel_id'=> 1,
         ]);
         CancelSOP::create([
-            'cancel_sops_description' => 'Jaminan uang kembali dan proses transaksi yang cepat.'
+            'cancel_sops_description' => 'Jaminan uang kembali dan proses transaksi yang cepat.',
+            'pet_hotel_id'=> 1,
         ]);
     }
 }

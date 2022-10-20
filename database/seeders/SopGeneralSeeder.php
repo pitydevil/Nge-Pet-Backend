@@ -8,21 +8,16 @@ use App\Models\SOPGeneral;
 
 class SopGeneralSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         SOPGeneral::create([
-            'sop_generals_description' => 'Asuransi untuk semua!', 
-            'sop_generals_asuransi' => 'Hewan dijamin memiliki perlindungan hewan selama dititipkan di tempat kami.'
+            'sop_generals_description' => 'Asuransi untuk semua!',
+            'pet_hotel_id' => 1, 
         ]);
 
         SOPGeneral::create([
             'sop_generals_description' => 'Makanan yang jelas!', 
-            'sop_generals_asuransi' => 'Hewan dijamin memiliki kejelassan tempat tinggal dan makanan di tempat kami.'
+            'pet_hotel_id' => 1,
         ]);
     }
 }
