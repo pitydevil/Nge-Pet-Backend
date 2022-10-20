@@ -17,6 +17,7 @@ class MonitoringImageSeeder extends Seeder
     {
         MonitoringImage::create([
             'monitoring_image_url'=> 'url-image',
+            'monitoring_id'=> 1,
         ]);
     }
 }

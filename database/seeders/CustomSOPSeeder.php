@@ -16,7 +16,9 @@ class CustomSOPSeeder extends Seeder
     public function run()
     {
         CustomSOP::create([
-            'custom_sop_name'=> 'Ajak main setiap 30 menit sekali'
+            'custom_sop_name'=> 'Ajak main setiap 30 menit sekali',
+            'order_detail_id' => 1,
+            'monitoring_id' => 1,
         ]);
     }
 }

@@ -16,7 +16,10 @@ class SupportedPetTypeSeeder extends Seeder
     public function run()
     {
         SupportedPetType::create([
-            'supported_pet_type_name'=> 'Persian'
+            'supported_pet_type_name'=> 'Persian 1'
+        ]);
+        SupportedPetType::create([
+            'supported_pet_type_name'=> 'Persian 2'
         ]);
     }
 }

@@ -1,10 +1,7 @@
 <?php
 
 namespace Database\Seeders;
-
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\SupportedPetType;
 use App\Models\SupportedPet;
 
 class SupportedPetSeeder extends Seeder
@@ -16,13 +13,15 @@ class SupportedPetSeeder extends Seeder
      */
     public function run()
     {
-        $supportedPetType = SupportedPetType::create([
-            'supported_pet_type_name'=> 'Persian 2'
-        ]);
-
         SupportedPet::create([
-            'supported_pet_name' => 'Pang pang', 
-            'supported_pet_type_id' => $supportedPetType->supported_pet_type_id
+            'supported_pet_name'=> 'Pang Pang',
+            'supported_pet_type_id' => 1,
+            'pet_hotel_id' => 1
+        ]);
+        SupportedPet::create([
+            'supported_pet_name'=> 'Pong Pong',
+            'supported_pet_type_id' => 2,
+            'pet_hotel_id' => 1
         ]);
     }
 }
