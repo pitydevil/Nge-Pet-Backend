@@ -10,12 +10,16 @@ use Illuminate\Support\Facades\DB;
 class ReservationController extends Controller
 {
     public function getPetHotelDetail(Request $request){
+        
+        // $pet_hotels = PetHotel::where('pet_hotels.pet_hotel_id', '=', $request->pet_hotel_id)
+        // ->join('fasilitas', 'fasilitas.pet_hotel_id', '=', 'pet_hotels.pet_hotel_id')
+        // ->get();
 
         $pet_hotels = DB::table('pet_hotels')
             ->where('pet_hotels.pet_hotel_id','=',$request->pet_hotel_id)
             ->select('pet_hotels.*')
             ->get();
-        
+
         if (!$pet_hotels)  {
             return response()->json([
                 'status' => 404,
@@ -107,6 +111,42 @@ class ReservationController extends Controller
             'status' => 200,
             'error' => null,
             'data' => $pet_hotels,
+        ]);
+    }
+
+    public function getPetHotelPackage(Request $request){
+        $packages = DB::table('packages')
+            ->where('packages.pet_hotel_id','=',$request->pet_hotel_id)
+            ->select('packages.*')
+            ->get();
+
+        if (!$packages)  {
+            return response()->json([
+                'status' => 404,
+                'error' => 'PACKAGES_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
+
+        // Begin package detail Array
+        foreach($packages as &$package)
+        {
+            $package_details = DB::table('package_details')
+            ->where('package_details.package_id','=',$package->package_id)
+            ->select('package_details.*')
+            ->get()
+            ->toArray();
+
+            $package->package_details = array_filter($package_details, function($package_detail) use ($package) {
+                return $package_detail->package_id === $package->package_id;
+            });
+        }
+        // End cancel sop Array
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => $packages,
         ]);
     }
 }
