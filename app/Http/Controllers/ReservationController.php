@@ -28,6 +28,21 @@ class ReservationController extends Controller
             ], 404);
         }
 
+        // Begin pet hotel image Array
+        $pet_hotel_images = DB::table('pet_hotel_images')
+        ->where('pet_hotel_images.pet_hotel_id','=',$request->pet_hotel_id)
+        ->select('pet_hotel_images.*')
+        ->get()
+        ->toArray();
+
+        foreach($pet_hotels as &$pet_hotel)
+        {
+            $pet_hotel->pet_hotel_images = array_filter($pet_hotel_images, function($pet_hotel_image) use ($pet_hotel) {
+                return $pet_hotel_image->pet_hotel_id === $pet_hotel->pet_hotel_id;
+            });
+        }
+        // End cancel sop Array
+
         // Begin supported pet Array
         $supported_pets = DB::table('supported_pets')
         ->where('supported_pets.pet_hotel_id','=',$request->pet_hotel_id)
@@ -147,6 +162,57 @@ class ReservationController extends Controller
             'status' => 200,
             'error' => null,
             'data' => $packages,
+        ]);
+    }
+
+    public function getPetHotelOrder(Request $request){
+        $pet_hotels = DB::table('pet_hotels')
+            ->where('pet_hotels.pet_hotel_id','=',$request->pet_hotel_id)
+            ->select('pet_hotels.*')
+            ->get();
+
+        if (!$pet_hotels)  {
+            return response()->json([
+                'status' => 404,
+                'error' => 'PET_HOTEL_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => $pet_hotels,
+        ]);
+    }
+
+    public function getOrderDetail(Request $request){
+        $pet_hotels = DB::table('pet_hotels')
+            ->where('pet_hotels.pet_hotel_id','=',$request->pet_hotel_id)
+            ->select('pet_hotels.*')
+            ->get();
+
+        if (!$pet_hotels)  {
+            return response()->json([
+                'status' => 404,
+                'error' => 'PET_HOTEL_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => $pet_hotels,
+        ]);
+    }
+
+    public function addOrder(Request $request){
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
         ]);
     }
 }
