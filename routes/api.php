@@ -151,5 +151,5 @@ Route::prefix('explore')->group(function() {
 });
 
 Route::prefix('reservation')->group(function() {
-    Route::get('/get_detail_pet_hotel/{id}', [ReservationController::class, 'getPetHotelDetail']);
+    Route::post('/get_detail_pet_hotel', [ReservationController::class, 'getPetHotelDetail']);
 });
