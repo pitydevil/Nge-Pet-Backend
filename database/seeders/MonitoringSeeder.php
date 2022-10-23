@@ -20,5 +20,15 @@ class MonitoringSeeder extends Seeder
             'monitoring_activity' => 'Anjingnya sedang Makan lagi',
             'order_detail_id' => 1,
         ]);
+
+        Monitoring::create([
+            'monitoring_activity' => 'kucing sedang Makan lagi',
+            'order_detail_id' => 2,
+        ]);
+
+        Monitoring::create([
+            'monitoring_activity' => 'kucing sedang Makan lagi',
+            'order_detail_id' => 3,
+        ]);
     }
 }

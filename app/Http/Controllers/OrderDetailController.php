@@ -62,6 +62,8 @@ class OrderDetailController extends Controller
         ]);
     }
 
+    
+
     public function add(Request $request){
         $validator = Validator::make($request->all(), [
             'pet_name' => 'required|string',
