@@ -7,146 +7,187 @@ use App\Http\Requests\StoreMonitoringRequest;
 use App\Http\Requests\UpdateMonitoringRequest;
 use App\Models\Monitoring;
 use App\Models\MonitoringImage;
+use App\Models\Order;
+use App\Models\CustomSOP;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class MonitoringController extends Controller
 {
-    public function getAllList(Request $request){
-        $limit = intval($request->input('limit', 25));
-        $monitoring = Monitoring::where('monitoring_id', '=', $request->monitoring_id)
-            ->with([
-            'monitoring_images:monitoring_image_id,monitoring_image_url'
-            ])
-            ->orderBy('created_at', 'DESC')
-            ->paginate($limit);
-        
-        return response()->json([
-            'status' => 200,
-            'error' => null,
-            'data' => Helper::paginate($monitoring),
-        ]);
-    }
-
-    public function getDetailID(Request $request, int $id){
-        $monitoring = Monitoring::where('monitoring_id', '=', $id)
-            ->where('monitoring_id', '=', $request->monitoring_id)
-            ->with(['monitoring_images,monitoring_images.monitoring_image_id,monitoring_images.monitoring_image_id'])
-            ->first();
-        
-        if (!$monitoring)  {
-            return response()->json([
-                'status' => 404,
-                'error' => 'MONITORING_NOT_FOUND',
-                'data' => null,
-            ], 404);
-        }
-        
-        return response()->json([
-            'status' => 200,
-            'error' => null,
-            'data' => $monitoring,
-        ]);
-    }
-
-    public function add(Request $request){
-        $validator = Validator::make($request->all(), [
-            'monitoring_name' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'error' => 'INVALID_REQUEST',
-                'data' => $validator->errors(),
-            ], 400);
-        }
-
-        $monitoring_image = MonitoringImage::where('monitoring_image_id', '=', $request->post('monitoring_image_id'))->first();
-        if (!$monitoring_image) {
-            return response()->json([
-            'status' => 404,
-             'error' => 'MONITORING_IMAGE_NOT_FOUND', 
-             'data' => null ], 
-             404);
-        }
-
-        Monitoring::create([
-            'monitoring_image_id' => $monitoring_image->monitoring_image_id,
-            'monitoring_name'    => $request->post('monitoring_name'),
-            'creation_date'         => $request->post('creation_date', Carbon::now()),
-        ]);
-
-        return response()->json([
-            'status' => 200,
-            'error' => null,
-            'data' => null,
-        ]);
-    }
-
-    public function update(Request $request, int $id){
-        $validator = Validator::make($request->all(), [
-            'monitoring_name' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'error' => 'INVALID_REQUEST',
-                'data' => $validator->errors(),
-            ], 400);
-        }
-
-        $monitoring = Monitoring::where('monitoring_id', '=', $id)
+    public function getDetailMonitoring(Request $request){
+        // Order Status
+        // 1: finished
+        // -1: unfinished
+        $order_id          = $request->order_id;
+        $order = Order::where('order_id', '=', $order_id)->where('order_status', '=', 'diproses')
+        ->with([
+            'petHotel:pet_hotel_id,pet_hotel_name,pet_hotel_description,pet_hotel_longitude,pet_hotel_latitude,pet_hotel_address',
+        ])
         ->first();
-        $monitoring_image = MonitoringImage::where('monitoring_image_id', '=', $request->post('monitoring_image_id'))->first();
 
-        if (!$monitoring_image) {
-            return response()->json([
-                'status' => 404, 
-                'error' => 'MONITORING_IMAGE_NOT_FOUND',
-                'data' => null 
-            ], 404);
-        }
-
-        if (!$monitoring) {
+        if (!$order) {
             return response()->json([
                 'status' => 404,
-                'error' => 'MONITORING_NOT_FOUND',
+                'error' => "EMPTY ORDER",
                 'data' => null,
             ], 404);
         }
 
-        $monitoring->monitoring_id = $request->post('monitoring_id', $monitoring->monitoring_id );
-        $monitoring->monitoring_image_id = $request->post('monitoring_image_id', $monitoring->monitoring_image_id);
-        $monitoring->monitoring_image_url = $request->post('monitoring_image_url',  $monitoring->monitoring_image_url);
-        $monitoring->save();
+        $result = $order->toArray();
+
+        $result['order_detail'] = $order->orderDetail->map(function ($orderDetail) {
+            $monitoring_array = Monitoring::where('order_detail_id', '=', $orderDetail->order_detail_id)->get()->all();
+            $cart = array();
+            foreach ($monitoring_array as $object) {
+                $test = MonitoringImage::where('monitoring_id', '=', $object->monitoring_id)->get()->all();
+                foreach ($test as $d) {
+                    array_push($cart, $d);
+                }
+            }
+            $cart = collect($cart);
+            return [
+                'order_detail_id' => $orderDetail->order_detail_id,
+                'pet_name' => $orderDetail->pet_name,
+                'pet_type' => $orderDetail->pet_type,
+                'pet_size' => $orderDetail->pet_size,
+                'order_detail_price' => $orderDetail->order_detail_price,
+                'custom_SOP' => CustomSOP::where('order_detail_id', '=', $orderDetail->order_detail_id)->get()->all(),
+                'monitoring' => $monitoring_array,
+
+                'monitoring_image' => $cart->map(function ($c) {
+                    return [
+                       'monitoring_image_id' => $c->monitoring_image_id,
+                       'monitoring_image_url' => $c->monitoring_image_url,
+                    ];
+                }),
+            ];
+        });
 
         return response()->json([
             'status' => 200,
             'error' => null,
-            'data' => null,
-        ]);
+            'data' => $result,
+        ], 200);
     }
 
-    public function delete(Request $request, int $id){
-        $monitoring = Monitoring::where('monitoring_id', '=', $id)
-            ->first();
+    public function getAllByDate(Request $request){
+        $date = $request->date;
+        $time = strtotime($date);
+        $date_object = date('Y-m-d',$time);
+        $order = Order::where('order_status', '=', 'diproses')
+        ->with([
+            'petHotel:pet_hotel_id,pet_hotel_name,pet_hotel_description,pet_hotel_longitude,pet_hotel_latitude,pet_hotel_address',
+        ])->get()->all();
 
-        if (!$monitoring) {
+        if (!$order) {
             return response()->json([
                 'status' => 404,
-                'error' => 'MONITORING_NOT_FOUND',
+                'error' => "EMPTY ORDER",
                 'data' => null,
             ], 404);
-        } 
+        }
 
-        $monitoring->delete();
+        $cart = array();
+
+        foreach ($order as $object) {
+            $result = $object->toArray();
+            $result['order_detail'] = $object->orderDetail->map(function ($orderDetail) use ($date_object) {
+                $monitoring_array = Monitoring::where('order_detail_id', '=', $orderDetail->order_detail_id)->whereDate('created_at', '=', $date_object)->get()->all();
+                $test = array();
+                foreach ($monitoring_array as $object) {
+                    $x = MonitoringImage::where('monitoring_id', '=', $object->monitoring_id)->get()->all();
+                    foreach ($x as $d) {
+                        array_push($test, $d);
+                    }
+                }
+                $test = collect($test);
+                return [
+                    'order_detail_id' => $orderDetail->order_detail_id,
+                    'pet_name' => $orderDetail->pet_name,
+                    'pet_type' => $orderDetail->pet_type,
+                    'pet_size' => $orderDetail->pet_size,
+                    'order_detail_price' => $orderDetail->order_detail_price,
+                    'custom_SOP' => CustomSOP::where('order_detail_id', '=', $orderDetail->order_detail_id)->get()->all(),
+                    'monitoring' => $monitoring_array,
+    
+                    'monitoring_image' => $test->map(function ($c) {
+                        return [
+                        'monitoring_image_id' => $c->monitoring_image_id,
+                          'monitoring_image_url' => $c->monitoring_image_url,
+                        ];
+                    }),
+                ];
+           });
+           array_push($cart, $result);
+        }
+        
         return response()->json([
             'status' => 200,
             'error' => null,
-            'data' => null,
-        ]);
+            'data' => $cart,
+        ], 200);
     }
+
+    public function getPetByDate(Request $request){
+        $date = $request->date;
+        // $pet_name = $request->pet_name;
+        // $pet_type = $request->pet_type;
+        // $pet_size = $request->pet_size;
+        $time = strtotime($date);
+        $date_object = date('Y-m-d',$time);
+        $order = Order::where('order_status', '=', 'diproses')
+        ->with([
+            'petHotel:pet_hotel_id,pet_hotel_name,pet_hotel_description,pet_hotel_longitude,pet_hotel_latitude,pet_hotel_address',
+        ])->get()->all();
+
+        if (!$order) {
+            return response()->json([
+                'status' => 404,
+                'error' => "EMPTY ORDER",
+                'data' => null,
+            ], 404);
+        }
+
+        $cart = array();
+
+        foreach ($order as $object) {
+            $result = $object->toArray();
+            $result['order_detail'] = $object->orderDetail->map(function ($orderDetail) use ($date_object, ) {
+                $monitoring_array = Monitoring::where('order_detail_id', '=', $orderDetail->order_detail_id)->whereDate('created_at', '=', $date_object)->get()->all();
+                $test = array();
+                foreach ($monitoring_array as $object) {
+                    $x = MonitoringImage::where('monitoring_id', '=', $object->monitoring_id)->get()->all();
+                    foreach ($x as $d) {
+                        array_push($test, $d);
+                    }
+                }
+                $test = collect($test);
+                return [
+                    'order_detail_id' => $orderDetail->order_detail_id,
+                    'pet_name' => $orderDetail->pet_name,
+                    'pet_type' => $orderDetail->pet_type,
+                    'pet_size' => $orderDetail->pet_size,
+                    'order_detail_price' => $orderDetail->order_detail_price,
+                    'custom_SOP' => CustomSOP::where('order_detail_id', '=', $orderDetail->order_detail_id)->get()->all(),
+                    'monitoring' => $monitoring_array,
+    
+                    'monitoring_image' => $test->map(function ($c) {
+                        return [
+                        'monitoring_image_id' => $c->monitoring_image_id,
+                          'monitoring_image_url' => $c->monitoring_image_url,
+                        ];
+                    }),
+                ];
+           });
+           array_push($cart, $result);
+        }
+        
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => $cart,
+        ], 200);
+    }
+
 }

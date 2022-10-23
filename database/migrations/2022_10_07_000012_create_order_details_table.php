@@ -21,10 +21,10 @@ return new class extends Migration
             $table->bigInteger('order_detail_price');
             $table->foreignId('package_id')->constrained('packages', 'package_id')->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('order_id')->constrained('orders', 'order_id')->cascadeOnUpdate()->restrictOnDelete();
+            
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *

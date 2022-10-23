@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\CustomSOP;
+use App\Models\Monitoring;
 
 class OrderDetail extends Model
 {
@@ -12,26 +14,18 @@ class OrderDetail extends Model
     protected $table='order_details';
 
     protected $primaryKey = 'order_detail_id';
-    protected $fillable = ['pet_name', 'pet_type', 'pet_size', 'order_detail_price', 'package_id', 'order_id'];
-    protected $hidden = ['created_at', 'updated_at'];
-
-    public function package()
-    {
-        return $this->belongsTo('App\Models\Package', 'package_id');
+    protected $fillable = ['pet_name', 'pet_type','order_detail_price', 'order_id', 'monitoring_id', 'package_id', 'custom_sop_id'];
+   // protected $hidden = [ 'order_id', 'package_id' ,'created_at', 'updated_at'];
+    
+    public function order() {
+        return $this->belongsTo(Order::class, 'order_detail_id', 'order_detail_id');
     }
 
-    public function order()
-    {
-        return $this->belongsTo('App\Models\Order', 'order_id');
+    public function customSOP() {
+        return $this->hasMany(CustomSOP::class, 'custom_sop_id', 'custom_sop_id');
     }
 
-    public function customSOP()
-    {
-        return $this->hasMany('App\Models\CustomSOP');
-    }
-
-    public function monitoring()
-    {
-        return $this->hasMany('App\Models\Monitoring');
+    public function monitoring() {
+        return $this->hasMany(Monitoring::class, 'monitoring_id', 'monitoring_id');
     }
 }
