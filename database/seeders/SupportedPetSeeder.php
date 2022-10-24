@@ -14,13 +14,11 @@ class SupportedPetSeeder extends Seeder
     public function run()
     {
         SupportedPet::create([
-            'supported_pet_name'=> 'Pang Pang',
-            'supported_pet_type_id' => 1,
+            'supported_pet_name'=> 'Anjing',
             'pet_hotel_id' => 1
         ]);
         SupportedPet::create([
-            'supported_pet_name'=> 'Pong Pong',
-            'supported_pet_type_id' => 2,
+            'supported_pet_name'=> 'Kucing',
             'pet_hotel_id' => 1
         ]);
     }

@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(PetHotelSeeder::class);
         $this->call(PetHotelImageSeeder::class);
-        $this->call(SupportedPetTypeSeeder::class);
         $this->call(SupportedPetSeeder::class);
+        $this->call(SupportedPetTypeSeeder::class);
         $this->call(AsuransiSeeder::class);
         $this->call(CancelSopSeeder::class);
         $this->call(FasilitasSeeder::class);

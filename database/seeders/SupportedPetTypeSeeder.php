@@ -16,10 +16,29 @@ class SupportedPetTypeSeeder extends Seeder
     public function run()
     {
         SupportedPetType::create([
-            'supported_pet_type_name'=> 'Persian 1'
+            'supported_pet_type_short_size'=> 'S',
+            'supported_pet_type_size'=> 'Kecil',
+            'supported_pet_id' => 1
         ]);
         SupportedPetType::create([
-            'supported_pet_type_name'=> 'Persian 2'
+            'supported_pet_type_short_size'=> 'M',
+            'supported_pet_type_size'=> 'Sedang',
+            'supported_pet_id' => 1
+        ]);
+        SupportedPetType::create([
+            'supported_pet_type_short_size'=> 'L',
+            'supported_pet_type_size'=> 'Besar',
+            'supported_pet_id' => 1
+        ]);
+        SupportedPetType::create([
+            'supported_pet_type_short_size'=> 'M',
+            'supported_pet_type_size'=> 'Sedang',
+            'supported_pet_id' => 2
+        ]);
+        SupportedPetType::create([
+            'supported_pet_type_short_size'=> 'L',
+            'supported_pet_type_size'=> 'Besar',
+            'supported_pet_id' => 2
         ]);
     }
 }

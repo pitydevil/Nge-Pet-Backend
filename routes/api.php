@@ -95,14 +95,6 @@ Route::prefix('v1')->group(function() {
         Route::delete('/{id}', [PetHotelImageController::class, 'delete']);
     });
 
-    Route::prefix('monitoring')->group(function() {
-        Route::get('/', [MonitoringController::class, 'getAllList']);
-        Route::get('/{id}', [MonitoringController::class, 'getDetailID']);
-        Route::post('/add', [MonitoringController::class, 'add']);
-        Route::put('/{id}', [MonitoringController::class, 'update']);
-        Route::delete('/{id}', [MonitoringController::class, 'delete']);
-    });
-
     Route::prefix('supported_pet')->group(function() {
         Route::get('/', [SupportedPetController::class, 'getAllList']);
         Route::get('/{id}', [SupportedPetController::class, 'getDetailID']);
@@ -141,6 +133,12 @@ Route::prefix('v1')->group(function() {
         Route::post('/add', [OrderDetailController::class, 'add']);
         Route::put('/{id}', [OrderDetailController::class, 'update']);
         Route::delete('/{id}', [OrderDetailController::class, 'delete']);
+    });
+
+    Route::prefix('monitoring')->group(function() {
+        Route::post('/', [MonitoringController::class, 'getAllByDate']);
+        Route::post('/getDetailMonitoring', [MonitoringController::class, 'getDetailMonitoring']);
+        Route::post('/getPetByDate', [MonitoringController::class, 'getPetByDate']);
     });
 });
 
