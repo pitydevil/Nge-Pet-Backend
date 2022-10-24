@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fasilitas;
+use App\Models\Order;
 use App\Models\PetHotel;
 use App\Models\PetHotelImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ReservationController extends Controller
 {
@@ -292,11 +294,34 @@ class ReservationController extends Controller
     }
 
     public function updateOrderStatus(Request $request){
+        $validator = Validator::make($request->all(), [
+            'order_status' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        $order = Order::where('order_id', '=', $request->order_id)
+        ->first();
+
+        if (!$order) return response()->json([
+            'status' => 404,
+            'error' => 'ORDER_NOT_FOUND',
+            'data' => null,
+        ], 404);
+
+        $order->order_status = $request->post('order_status', $order->order_status);
+        $order->save();
 
         return response()->json([
             'status' => 200,
             'error' => null,
-            'data' => null,
+            'data' => $order,
         ]);
     }
 }

@@ -158,6 +158,6 @@ Route::prefix('reservation')->group(function() {
         Route::post('/list', [ReservationController::class, 'getOrderList']);
         Route::post('/detail', [ReservationController::class, 'getOrderDetail']);
         Route::post('/add', [ReservationController::class, 'addOrder']);
-        Route::put('/udpate-status', [ReservationController::class, 'updateOrderStatus']);
+        Route::post('/update-status', [ReservationController::class, 'updateOrderStatus']);
     });
 });
