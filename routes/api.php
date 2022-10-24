@@ -157,7 +157,9 @@ Route::prefix('reservation')->group(function() {
         Route::post('/order', [ReservationController::class, 'getPetHotelOrder']);
     });
     Route::prefix('order')->group(function() {
+        Route::post('/list', [ReservationController::class, 'getOrderList']);
         Route::post('/detail', [ReservationController::class, 'getOrderDetail']);
         Route::post('/add', [ReservationController::class, 'addOrder']);
+        Route::put('/udpate-status', [ReservationController::class, 'updateOrderStatus']);
     });
 });
