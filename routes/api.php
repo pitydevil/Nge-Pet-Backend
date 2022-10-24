@@ -145,7 +145,7 @@ Route::prefix('v1')->group(function() {
 Route::prefix('explore')->group(function() {
     // Route::post('/get-all-list', [ExploreController::class, 'getAllList']);
     // Route::post('/generatePenilaian', [PenilaianController::class, 'generatePenilaian'])->name('penilaian.generate');
-    Route::get('/get-nearest-list',[ExploreController::class, 'getNearestList']);
+    Route::post('/get-nearest-list',[ExploreController::class, 'getNearestList']);
 });
 
 Route::prefix('reservation')->group(function() {

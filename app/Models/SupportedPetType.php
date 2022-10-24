@@ -11,11 +11,11 @@ class SupportedPetType extends Model
     protected $table='supported_pet_types';
 
     protected $primaryKey = 'supported_pet_type_id';
-    protected $fillable = ['ssupported_pet_type_name'];
+    protected $fillable = ['supported_pet_type_short_size', 'supported_pet_type_size', 'supported_pet_id'];
     protected $hidden = ['created_at', 'updated_at'];
 
     public function supportedPet()
     {
-        return $this->hasMany('App\Models\SupportedPet');
+        return $this->belongsTo('App\Models\SupportedPet', 'supported_pet_id');
     }
 }

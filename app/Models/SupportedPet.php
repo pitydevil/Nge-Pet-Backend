@@ -12,7 +12,7 @@ class SupportedPet extends Model
     protected $table='supported_pets';
 
     protected $primaryKey = 'supported_pet_id';
-    protected $fillable = ['supported_pet_name', 'pet_hotel_id', 'supported_pet_type_id'];
+    protected $fillable = ['supported_pet_name', 'pet_hotel_id'];
     protected $hidden = ['created_at', 'updated_at'];
 
     public function petHotel()
@@ -20,9 +20,9 @@ class SupportedPet extends Model
         return $this->belongsTo('App\Models\PetHotel', 'pet_hotel_id');
     }
 
-    public function supportedPet()
+    public function supportedPetType()
     {
-        return $this->belongsTo('App\Models\SupportedPetType', 'supported_pet_type_id');
+        return $this->hasMany(supportedPetType::class, 'supported_pet_id');
     }
 
     public function package()

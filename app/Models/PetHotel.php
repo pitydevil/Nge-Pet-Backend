@@ -42,7 +42,7 @@ class PetHotel extends Model
 
     public function petHotelImage()
     {
-        return $this->hasMany('App\Models\PetHotelImage');
+        return $this->hasMany(PetHotelImage::class, 'pet_hotel_id');
     }
 
     public function sopGeneral()
@@ -52,6 +52,6 @@ class PetHotel extends Model
 
     public function supportedPet()
     {
-        return $this->hasMany('App\Models\SupportedPet');
+        return $this->hasMany(SupportedPet::class, 'pet_hotel_id');
     }
 }
