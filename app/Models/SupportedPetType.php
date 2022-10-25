@@ -16,6 +16,6 @@ class SupportedPetType extends Model
 
     public function supportedPet()
     {
-        return $this->belongsTo('App\Models\SupportedPet', 'supported_pet_id');
+        return $this->belongsTo(SupportedPet::class, 'supported_pet_id');
     }
 }

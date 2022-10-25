@@ -17,27 +17,27 @@ class PetHotel extends Model
 
     public function asuransi()
     {
-        return $this->hasMany('App\Models\Asuransi');
+        return $this->hasMany(Asuransi::class, 'pet_hotel_id');
     }
 
     public function cancelSOP()
     {
-        return $this->hasMany('App\Models\CancelSOP');
+        return $this->hasMany(CancelSOP::class, 'pet_hotel_id');
     }
 
     public function fasilitas()
     {
-        return $this->hasMany('App\Models\Fasilitas');
+        return $this->hasMany(Fasilitas::class, 'pet_hotel_id');
     }
 
     public function order()
     {
-        return $this->hasMany('App\Models\Order');
+        return $this->hasMany(Order::class, 'pet_hotel_id');
     }
 
     public function package()
     {
-        return $this->hasMany('App\Models\Package');
+        return $this->hasMany(Package::class, 'pet_hotel_id');
     }
 
     public function petHotelImage()
@@ -47,7 +47,7 @@ class PetHotel extends Model
 
     public function sopGeneral()
     {
-        return $this->hasMany('App\Models\SOPGeneral');
+        return $this->hasMany(SOPGeneral::class, 'pet_hotel_id');
     }
 
     public function supportedPet()
