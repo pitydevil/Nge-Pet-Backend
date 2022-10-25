@@ -17,21 +17,21 @@ class Package extends Model
 
     public function petHotel()
     {
-        return $this->belongsTo('App\Models\PetHotel', 'pet_hotel_id');
+        return $this->belongsTo(PetHotel::class, 'pet_hotel_id');
     }
 
     public function supportedPet()
     {
-        return $this->belongsTo('App\Models\SupportedPet', 'supported_pet_id');
+        return $this->belongsTo(SupportedPet::class, 'supported_pet_id');
     }
 
     public function orderDetail()
     {
-        return $this->hasMany('App\Models\OrderDetail');
+        return $this->hasMany(OrderDetail::class, 'package_id');
     }
 
     public function packageDetail()
     {
-        return $this->hasMany('App\Models\PackageDetail');
+        return $this->hasMany(PackageDetail::class, 'package_id');
     }
 }

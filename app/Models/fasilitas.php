@@ -17,6 +17,6 @@ class Fasilitas extends Model
 
     public function petHotel()
     {
-        return $this->belongsTo('App\Models\PetHotel', 'pet_hotel_id');
+        return $this->belongsTo(PetHotel::class, 'pet_hotel_id');
     }
 }

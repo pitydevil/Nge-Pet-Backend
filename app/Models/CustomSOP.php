@@ -10,7 +10,7 @@ use App\Models\OrderDetail;
 class CustomSOP extends Model
 {
     use HasFactory;
-    
+
     protected $table='custom_sops';
 
     protected $primaryKey = 'custom_sop_id';
@@ -19,11 +19,11 @@ class CustomSOP extends Model
 
     public function orderDetail()
     {
-        return $this->belongsTo('App\Models\OrderDetail', 'order_detail_id');
+        return $this->belongsTo(OrderDetail::class, 'order_detail_id');
     }
 
     public function monitoring()
     {
-        return $this->belongsTo('App\Models\Monitoring', 'monitoring_id');
+        return $this->belongsTo(Monitoring::class, 'monitoring_id');
     }
 }

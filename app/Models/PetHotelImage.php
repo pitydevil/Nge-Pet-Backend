@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PetHotelImage extends Model
 {
     use HasFactory;
-    
+
     protected $table='pet_hotel_images';
 
     protected $primaryKey = 'pet_hotel_image_id';
@@ -17,6 +17,6 @@ class PetHotelImage extends Model
 
     public function petHotel()
     {
-        return $this->belongsTo('App\Models\PetHotel', 'pet_hotel_id');
+        return $this->belongsTo(PetHotel::class, 'pet_hotel_id');
     }
 }

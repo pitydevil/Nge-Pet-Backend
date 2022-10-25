@@ -17,6 +17,6 @@ class MonitoringImage extends Model
 
     public function monitoring()
     {
-        return $this->belongsTo('App\Models\Monitoring', 'monitoring_id');
+        return $this->belongsTo(Monitoring::class, 'monitoring_id');
     }
 }
