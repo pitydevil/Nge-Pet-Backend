@@ -149,5 +149,14 @@ Route::prefix('explore')->group(function() {
 });
 
 Route::prefix('reservation')->group(function() {
-    Route::get('/get_detail_pet_hotel/{id}', [ReservationController::class, 'getPetHotelDetail']);
+    Route::prefix('pet_hotel')->group(function() {
+        Route::post('/detail', [ReservationController::class, 'getPetHotelDetail']);
+        Route::post('/package', [ReservationController::class, 'getPetHotelPackage']);
+    });
+    Route::prefix('order')->group(function() {
+        Route::post('/list', [ReservationController::class, 'getOrderList']);
+        Route::post('/detail', [ReservationController::class, 'getOrderDetail']);
+        Route::post('/add', [ReservationController::class, 'addOrder']);
+        Route::post('/update-status', [ReservationController::class, 'updateOrderStatus']);
+    });
 });

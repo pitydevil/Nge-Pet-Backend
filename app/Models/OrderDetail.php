@@ -14,7 +14,7 @@ class OrderDetail extends Model
     protected $table='order_details';
 
     protected $primaryKey = 'order_detail_id';
-    protected $fillable = ['pet_name', 'pet_type','order_detail_price', 'order_id', 'monitoring_id', 'package_id', 'custom_sop_id'];
+    protected $fillable = ['pet_name', 'pet_type', 'pet_size','order_detail_price', 'order_id', 'monitoring_id', 'package_id', 'custom_sop_id'];
    // protected $hidden = [ 'order_id', 'package_id' ,'created_at', 'updated_at'];
     
     public function order() {
