@@ -322,11 +322,11 @@ class ReservationController extends Controller
                 'package_id' => $order_detail['package_id'],
             ]);
 
-            $monitoring_activity = $order->order_code.'- Aktivtias Hewan';
-            $monitoring = Monitoring::create([
-                'monitoring_activity' => $monitoring_activity,
-                'order_detail_id' => $detail->order_detail_id,
-            ]);
+            // $monitoring_activity = $order->order_code.'- Aktivtias Hewan';
+            // $monitoring = Monitoring::create([
+            //     'monitoring_activity' => $monitoring_activity,
+            //     'order_detail_id' => $detail->order_detail_id,
+            // ]);
 
             $custom_sops = $order_detail['custom_sops'];
 
@@ -335,7 +335,7 @@ class ReservationController extends Controller
                 $custom = CustomSOP::create([
                     'custom_sop_name' => $custom_sop['custom_sop_name'],
                     'order_detail_id' => $detail->order_detail_id,
-                    'monitoring_id' => $monitoring->monitoring_id,
+                    'monitoring_id' => 1,
                 ]);
             }
         }
