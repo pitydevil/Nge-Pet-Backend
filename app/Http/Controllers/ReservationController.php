@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomSOP;
 use App\Models\Fasilitas;
+use App\Models\Monitoring;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\PetHotel;
 use App\Models\PetHotelImage;
+use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -43,11 +48,24 @@ class ReservationController extends Controller
         ->where('supported_pets.pet_hotel_id','=',$request->pet_hotel_id)
         ->select(
             'supported_pets.*',
-            'supported_pet_types.*',
         )
-        ->join('supported_pet_types','supported_pet_types.supported_pet_type_id', '=','supported_pets.supported_pet_type_id')
         ->get()
         ->toArray();
+
+        // Begin supported pet type Array
+        foreach($supported_pets as &$supported_pet)
+        {
+            $supported_pet_types = DB::table('supported_pet_types')
+            ->where('supported_pet_types.supported_pet_id','=',$supported_pet->supported_pet_id)
+            ->select('supported_pet_types.*')
+            ->get()
+            ->toArray();
+
+            $supported_pet->supported_pet_types = array_filter($supported_pet_types, function($supported_pet_type) use ($supported_pet) {
+                return $supported_pet_type->supported_pet_id === $supported_pet->supported_pet_id;
+            });
+        }
+        // End supported pet type Array
 
         $pet_hotel->supported_pets = array_filter($supported_pets, function($supported_pet) use ($pet_hotel) {
             return $supported_pet->pet_hotel_id === $pet_hotel->pet_hotel_id;
@@ -241,7 +259,6 @@ class ReservationController extends Controller
         $order_details = DB::table('order_details')
         ->where('order_details.order_id','=',$order->order_id)
         ->select('order_details.*')
-        ->join('custom_sops', 'order_details.order_detail_id', '=', 'custom_sops.order_detail_id')
         ->get()
         ->toArray();
 
@@ -285,11 +302,69 @@ class ReservationController extends Controller
     }
 
     public function addOrder(Request $request){
+        $validator_order = Validator::make($request->all(), [
+            'order_code' => 'required|string',
+            'order_total_price' => 'required|integer',
+            'order_date_checkin' => 'required|string',
+            'order_date_checkin' => 'required|string',
+            'order_status' => 'required|string',
+        ]);
+
+        if ($validator_order->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator_order->errors(),
+            ], 400);
+        }
+
+        $order = Order::create([
+            'order_code' => $request->post('order_code'),
+            'order_date_checkin' => $request->post('order_date_checkin'),
+            'order_date_checkout' => $request->post('order_date_checkout'),
+            'order_total_price' => $request->post('order_total_price'),
+            'order_status' => $request->post('order_status'),
+            'user_id' => $request->post('user_id'),
+            'pet_hotel_id' => $request->post('pet_hotel_id'),
+        ]);
+
+        $order_details = $request->order_details;
+
+        $count = null;
+
+        foreach($order_details as $order_detail)
+        {
+            $detail = OrderDetail::create([
+                'pet_name' => $order_detail['pet_name'],
+                'pet_type' => $order_detail['pet_type'],
+                'pet_size' => $order_detail['pet_size'],
+                'order_detail_price' => $order->order_total_price,
+                'order_id' => $order->order_id,
+                'package_id' => $order_detail['package_id'],
+            ]);
+
+            $custom_sops = $order_detail['custom_sops'];
+
+            foreach($custom_sops as $custom_sop)
+            {
+                $monitoring_activity = $order->order_code.'-'.$custom_sop['custom_sop_name'];
+                $monitoring = Monitoring::create([
+                    'monitoring_activity' => $monitoring_activity,
+                    'order_detail_id' => $detail->order_detail_id,
+                ]);
+
+                $custom = CustomSOP::create([
+                    'custom_sop_name' => $custom_sop['custom_sop_name'],
+                    'order_detail_id' => $detail->order_detail_id,
+                    'monitoring_id' => $monitoring->monitoring_id,
+                ]);
+            }
+        }
 
         return response()->json([
             'status' => 200,
             'error' => null,
-            'data' => null,
+            'data' => $count,
         ]);
     }
 
