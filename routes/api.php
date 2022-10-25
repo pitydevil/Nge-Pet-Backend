@@ -152,7 +152,6 @@ Route::prefix('reservation')->group(function() {
     Route::prefix('pet_hotel')->group(function() {
         Route::post('/detail', [ReservationController::class, 'getPetHotelDetail']);
         Route::post('/package', [ReservationController::class, 'getPetHotelPackage']);
-        Route::post('/order', [ReservationController::class, 'getPetHotelOrder']);
     });
     Route::prefix('order')->group(function() {
         Route::post('/list', [ReservationController::class, 'getOrderList']);

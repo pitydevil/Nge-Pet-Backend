@@ -163,27 +163,6 @@ class ReservationController extends Controller
         ]);
     }
 
-    public function getPetHotelOrder(Request $request){
-        $pet_hotels = DB::table('pet_hotels')
-            ->where('pet_hotels.pet_hotel_id','=',$request->pet_hotel_id)
-            ->select('pet_hotels.*')
-            ->get();
-
-        if (!$pet_hotels)  {
-            return response()->json([
-                'status' => 404,
-                'error' => 'PET_HOTEL_NOT_FOUND',
-                'data' => null,
-            ], 404);
-        }
-
-        return response()->json([
-            'status' => 200,
-            'error' => null,
-            'data' => $pet_hotels,
-        ]);
-    }
-
     public function getOrderList(){
         $orders = DB::table('orders')
             ->select(
