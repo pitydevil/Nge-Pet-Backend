@@ -17,7 +17,7 @@ class SupportedPet extends Model
 
     public function petHotel()
     {
-        return $this->belongsTo('App\Models\PetHotel', 'pet_hotel_id');
+        return $this->belongsTo(PetHotel::class, 'pet_hotel_id');
     }
 
     public function supportedPetType()
@@ -27,6 +27,6 @@ class SupportedPet extends Model
 
     public function package()
     {
-        return $this->hasMany('App\Models\Package');
+        return $this->hasMany(Package::class, 'suppoted_pet_id');
     }
 }

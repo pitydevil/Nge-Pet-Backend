@@ -20,5 +20,15 @@ class CustomSOPSeeder extends Seeder
             'order_detail_id' => 1,
             'monitoring_id' => 1,
         ]);
+        CustomSOP::create([
+            'custom_sop_name'=> 'Ajak main setiap 60 menit sekali',
+            'order_detail_id' => 2,
+            'monitoring_id' => 1,
+        ]);
+        CustomSOP::create([
+            'custom_sop_name'=> 'Ajak main setiap 60 menit sekali',
+            'order_detail_id' => 3,
+            'monitoring_id' => 1,
+        ]);
     }
 }

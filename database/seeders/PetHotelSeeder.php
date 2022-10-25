@@ -23,5 +23,18 @@ class PetHotelSeeder extends Seeder
             'pet_hotel_provinsi' => 'Jawa Barat',
             'pet_hotel_pos' => 12123,
         ]);
+        PetHotel::create([
+            'pet_hotel_id' => 2,
+            'pet_hotel_name' => 'Amore Pet Hotel 2',
+            'pet_hotel_description' => 'Kami telah beroperasi selama 9 tahun berturut-turut',
+            'pet_hotel_longitude' => 15.235125,
+            'pet_hotel_latitude' => 12.1325135,
+            'pet_hotel_address' => 'Jalan Ayani no. 16',
+            'pet_hotel_kelurahan' => 'Kelurahan Suka Maju',
+            'pet_hotel_kecamatan' => 'Kecamatan Suka Makan',
+            'pet_hotel_kota' => 'Sukabumi',
+            'pet_hotel_provinsi' => 'Jawa Barat',
+            'pet_hotel_pos' => 12124,
+        ]);
     }
 }

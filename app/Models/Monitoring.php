@@ -17,16 +17,16 @@ class Monitoring extends Model
 
     public function orderDetail()
     {
-        return $this->belongsTo('App\Models\OrderDetail', 'order_detail_id');
+        return $this->belongsTo(OrderDetail::class, 'order_detail_id');
     }
 
     public function customSOP()
     {
-        return $this->hasMany('App\Models\CustomSOP');
+        return $this->hasMany(CustomSOP::class, 'monitoring_id');
     }
 
     public function monitoringImage()
     {
-        return $this->hasMany('App\Models\MonitoringImage');
+        return $this->hasMany(MonitoringImage::class, 'monitoring_id');
     }
 }

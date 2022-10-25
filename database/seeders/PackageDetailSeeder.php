@@ -18,5 +18,9 @@ class PackageDetailSeeder extends Seeder
             'package_detail_name' => 'Premium luar biasa',
             'package_id' => 1,
         ]);
+        PackageDetail::create([
+            'package_detail_name' => 'Premium',
+            'package_id' => 2,
+        ]);
     }
 }
