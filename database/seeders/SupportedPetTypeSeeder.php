@@ -40,5 +40,15 @@ class SupportedPetTypeSeeder extends Seeder
             'supported_pet_type_size'=> 'Besar',
             'supported_pet_id' => 2
         ]);
+        SupportedPetType::create([
+            'supported_pet_type_short_size'=> 'S',
+            'supported_pet_type_size'=> 'Kecil',
+            'supported_pet_id' => 3
+        ]);
+        SupportedPetType::create([
+            'supported_pet_type_short_size'=> 'S',
+            'supported_pet_type_size'=> 'Kecil',
+            'supported_pet_id' => 4
+        ]);
     }
 }

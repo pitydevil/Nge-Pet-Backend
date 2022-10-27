@@ -23,7 +23,12 @@ class PetHotelImageSeeder extends Seeder
         PetHotelImage::create([
             'pet_hotel_image_id' => 2,
             'pet_hotel_image_url'=> 'url-image-2',
-            'pet_hotel_id'=> 1,
+            'pet_hotel_id'=> 2,
+        ]);
+        PetHotelImage::create([
+            'pet_hotel_image_id' => 3,
+            'pet_hotel_image_url'=> 'url-image-3',
+            'pet_hotel_id'=> 3,
         ]);
     }
 }

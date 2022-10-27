@@ -21,5 +21,13 @@ class SupportedPetSeeder extends Seeder
             'supported_pet_name'=> 'Kucing',
             'pet_hotel_id' => 1
         ]);
+        SupportedPet::create([
+            'supported_pet_name'=> 'Anjing',
+            'pet_hotel_id' => 2
+        ]);
+        SupportedPet::create([
+            'supported_pet_name'=> 'Kucing',
+            'pet_hotel_id' => 3
+        ]);
     }
 }
