@@ -144,6 +144,7 @@ Route::prefix('v1')->group(function() {
 
 Route::prefix('explore')->group(function() {
     Route::post('/get-nearest-pet-hotel',[ExploreController::class, 'getNearestPetHotel']);
+    Route::post('/search-pet-hotel',[ExploreController::class, 'searchPetHotel']);
 });
 
 Route::prefix('reservation')->group(function() {

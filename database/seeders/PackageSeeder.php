@@ -20,7 +20,13 @@ class PackageSeeder extends Seeder
             'package_name' => 'paket 1',
             'package_price' => 40000,
             'pet_hotel_id' => 2,
-            'supported_pet_id' => 1,
+            'supported_pet_id' => 3,
+        ]);
+        Package::create([
+            'package_name' => 'paket 1',
+            'package_price' => 50000,
+            'pet_hotel_id' => 3,
+            'supported_pet_id' => 4,
         ]);
     }
 }
