@@ -187,4 +187,30 @@ class MonitoringController extends Controller
         ], 200);
     }
 
+    public function addMonitoring(Request $request){
+        $validator = Validator::make($request->all(), [
+            'monitoring_activity' => 'required|string',
+            'order_detail_id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        Monitoring::create([
+            'monitoring_activity' => $request->post('monitoring_activity'),
+            'order_detail_id' => $request->post('order_detail_id'),
+        ]);
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
+    }
+
 }
