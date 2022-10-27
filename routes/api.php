@@ -139,6 +139,7 @@ Route::prefix('v1')->group(function() {
         Route::post('/', [MonitoringController::class, 'getAllByDate']);
         Route::post('/getDetailMonitoring', [MonitoringController::class, 'getDetailMonitoring']);
         Route::post('/getPetByDate', [MonitoringController::class, 'getPetByDate']);
+        Route::post('/addMonitoring', [MonitoringController::class, 'addMonitoring']);
     });
 });
 
