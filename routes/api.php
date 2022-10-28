@@ -134,13 +134,13 @@ Route::prefix('v1')->group(function() {
         Route::put('/{id}', [OrderDetailController::class, 'update']);
         Route::delete('/{id}', [OrderDetailController::class, 'delete']);
     });
+});
 
-    Route::prefix('monitoring')->group(function() {
-        Route::post('/', [MonitoringController::class, 'getAllByDate']);
-        Route::post('/getDetailMonitoring', [MonitoringController::class, 'getDetailMonitoring']);
-        Route::post('/getPetByDate', [MonitoringController::class, 'getPetByDate']);
-        Route::post('/addMonitoring', [MonitoringController::class, 'addMonitoring']);
-    });
+Route::prefix('monitoring')->group(function() {
+    Route::post('/', [MonitoringController::class, 'getAllByDate']);
+    Route::post('/getDetailMonitoring', [MonitoringController::class, 'getDetailMonitoring']);
+    Route::post('/getPetByDate', [MonitoringController::class, 'getPetByDate']);
+    Route::post('/addMonitoring', [MonitoringController::class, 'addMonitoring']);
 });
 
 Route::prefix('explore')->group(function() {
