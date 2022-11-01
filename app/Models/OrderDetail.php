@@ -24,4 +24,9 @@ class OrderDetail extends Model
     public function package() {
         return $this->belongsTo(Package::class, 'package_id');
     }
+
+    public function customSOP()
+    {
+        return $this->hasMany(CustomSOP::class, 'order_detail_id');
+    }
 }

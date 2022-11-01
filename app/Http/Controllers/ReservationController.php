@@ -7,8 +7,11 @@ use App\Models\Fasilitas;
 use App\Models\Monitoring;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Package;
 use App\Models\PetHotel;
 use App\Models\PetHotelImage;
+use App\Models\SupportedPet;
+use App\Models\SupportedPetType;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -17,12 +20,14 @@ use Illuminate\Support\Facades\Validator;
 
 class ReservationController extends Controller
 {
-    public function getPetHotelDetail(Request $request){
-        $pet_hotel = DB::table('pet_hotels')
-            ->where('pet_hotels.pet_hotel_id','=',$request->pet_hotel_id)
-            ->select('pet_hotels.*')
-            ->first();
 
+    public function getPetHotelDetail(Request $request){
+        $pet_hotel  = PetHotel::where('pet_hotel_id', '=', $request->pet_hotel_id)
+                                ->with([
+                                        'petHotelImage', 'fasilitas', 'sopGeneral', 'asuransi', 'cancelSOP',
+                                    ])
+                                ->first();
+        
         if (!$pet_hotel)  {
             return response()->json([
                 'status' => 404,
@@ -31,94 +36,15 @@ class ReservationController extends Controller
             ], 404);
         }
 
-        // Begin pet hotel image Array
-        $pet_hotel_images = DB::table('pet_hotel_images')
-        ->where('pet_hotel_images.pet_hotel_id','=',$request->pet_hotel_id)
-        ->select('pet_hotel_images.*')
-        ->get()
-        ->toArray();
+        //Get supported pet data for certain pet hotel and put into data object
+        $supported_pet                 = SupportedPet::where('pet_hotel_id', $request->pet_hotel_id)->get();
+        $pet_hotel->supported_pet      = $supported_pet;
 
-        $pet_hotel->pet_hotel_images = array_filter($pet_hotel_images, function($pet_hotel_image) use ($pet_hotel) {
-            return $pet_hotel_image->pet_hotel_id === $pet_hotel->pet_hotel_id;
-        });
-        // End pet hotel image Array
-
-        // Begin supported pet Array
-        $supported_pets = DB::table('supported_pets')
-        ->where('supported_pets.pet_hotel_id','=',$request->pet_hotel_id)
-        ->select(
-            'supported_pets.*',
-        )
-        ->get()
-        ->toArray();
-
-        // Begin supported pet type Array
-        foreach($supported_pets as &$supported_pet)
-        {
-            $supported_pet_types = DB::table('supported_pet_types')
-            ->where('supported_pet_types.supported_pet_id','=',$supported_pet->supported_pet_id)
-            ->select('supported_pet_types.*')
-            ->get()
-            ->toArray();
-
-            $supported_pet->supported_pet_types = array_filter($supported_pet_types, function($supported_pet_type) use ($supported_pet) {
-                return $supported_pet_type->supported_pet_id === $supported_pet->supported_pet_id;
-            });
+        foreach($supported_pet as $sp){
+            //Get supported pet type data for certain supported pet and put into supported pet object
+            $supported_pet_type     = SupportedPetType::where('supported_pet_id', $sp->supported_pet_id)->get();
+            $sp->supported_pet_types = $supported_pet_type;
         }
-        // End supported pet type Array
-
-        $pet_hotel->supported_pets = array_filter($supported_pets, function($supported_pet) use ($pet_hotel) {
-            return $supported_pet->pet_hotel_id === $pet_hotel->pet_hotel_id;
-        });
-        // End supported pet Array
-
-        // Begin fasilitas Array
-        $fasilitas = DB::table('fasilitas')
-        ->where('fasilitas.pet_hotel_id','=',$request->pet_hotel_id)
-        ->select('fasilitas.*')
-        ->get()
-        ->toArray();
-
-        $pet_hotel->fasilitas = array_filter($fasilitas, function($fasil) use ($pet_hotel) {
-            return $fasil->pet_hotel_id === $pet_hotel->pet_hotel_id;
-        });
-        // End fasilitas Array
-
-        // Begin sop general Array
-        $sop_generals = DB::table('sop_generals')
-        ->where('sop_generals.pet_hotel_id','=',$request->pet_hotel_id)
-        ->select('sop_generals.*')
-        ->get()
-        ->toArray();
-
-        $pet_hotel->sop_generals = array_filter($sop_generals, function($sop_general) use ($pet_hotel) {
-            return $sop_general->pet_hotel_id === $pet_hotel->pet_hotel_id;
-        });
-        // End sop general Array
-
-        // Begin asuransi Array
-        $asuransis = DB::table('asuransis')
-        ->where('asuransis.pet_hotel_id','=',$request->pet_hotel_id)
-        ->select('asuransis.*')
-        ->get()
-        ->toArray();
-
-        $pet_hotel->asuransis = array_filter($asuransis, function($asuransi) use ($pet_hotel) {
-            return $asuransi->pet_hotel_id === $pet_hotel->pet_hotel_id;
-        });
-        // End asuransi Array
-
-        // Begin cancel sop Array
-        $cancel_sops = DB::table('cancel_sops')
-        ->where('cancel_sops.pet_hotel_id','=',$request->pet_hotel_id)
-        ->select('cancel_sops.*')
-        ->get()
-        ->toArray();
-
-        $pet_hotel->cancel_sops = array_filter($cancel_sops, function($cancel_sop) use ($pet_hotel) {
-            return $cancel_sop->pet_hotel_id === $pet_hotel->pet_hotel_id;
-        });
-        // End cancel sop Array
         
         return response()->json([
             'status' => 200,
@@ -128,10 +54,11 @@ class ReservationController extends Controller
     }
 
     public function getPetHotelPackage(Request $request){
-        $packages = DB::table('packages')
-            ->where('packages.pet_hotel_id','=',$request->pet_hotel_id)
-            ->select('packages.*')
-            ->get();
+        $packages = Package::where('pet_hotel_id','=',$request->pet_hotel_id)
+                            ->with([
+                                    'packageDetail',
+                                ])
+                            ->get();
 
         if (!$packages)  {
             return response()->json([
@@ -141,21 +68,6 @@ class ReservationController extends Controller
             ], 404);
         }
 
-        // Begin package detail Array
-        foreach($packages as &$package)
-        {
-            $package_details = DB::table('package_details')
-            ->where('package_details.package_id','=',$package->package_id)
-            ->select('package_details.*')
-            ->get()
-            ->toArray();
-
-            $package->package_details = array_filter($package_details, function($package_detail) use ($package) {
-                return $package_detail->package_id === $package->package_id;
-            });
-        }
-        // End package detail sop Array
-
         return response()->json([
             'status' => 200,
             'error' => null,
@@ -164,8 +76,7 @@ class ReservationController extends Controller
     }
 
     public function getOrderList(){
-        $orders = DB::table('orders')
-            ->select(
+        $orders = Order::select(
                 'orders.order_id','orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 
                 'pet_hotels.pet_hotel_name', 
                 'order_details.pet_name','order_details.pet_type','order_details.pet_size',
@@ -200,12 +111,11 @@ class ReservationController extends Controller
     }
 
     public function getOrderDetail(Request $request){
-        $order = DB::table('orders')
-            ->where('orders.order_id', '=', $request->order_id)
-            ->select(
-                'orders.*', 
-            )
-            ->first();
+        $order = Order::where('orders.order_id', '=', $request->order_id)
+                        ->with([
+                            'petHotel', 'petHotel.cancelSOP', 'orderDetail', 'orderDetail.package', 'orderDetail.customSOP'
+                        ])
+                        ->first();
 
         if (!$order)  {
             return response()->json([
@@ -213,65 +123,7 @@ class ReservationController extends Controller
                 'error' => 'ORDER_NOT_FOUND',
                 'data' => null,
             ], 404);
-        }
-
-        $pet_hotel = DB::table('pet_hotels')
-            ->where('pet_hotels.pet_hotel_id','=',$order->pet_hotel_id)
-            ->select('pet_hotels.*')
-            ->first();
-
-         // Begin cancel sop Array
-         $cancel_sops = DB::table('cancel_sops')
-         ->where('cancel_sops.pet_hotel_id','=',$pet_hotel->pet_hotel_id)
-         ->select('cancel_sops.*')
-         ->get()
-         ->toArray();
- 
-         $pet_hotel->cancel_sops = array_filter($cancel_sops, function($cancel_sop) use ($pet_hotel) {
-             return $cancel_sop->pet_hotel_id === $pet_hotel->pet_hotel_id;
-         });
-         // End cancel sop Array
-
-        $order->pet_hotel = $pet_hotel;
-
-
-        $order_details = DB::table('order_details')
-        ->where('order_details.order_id','=',$order->order_id)
-        ->select('order_details.*')
-        ->get()
-        ->toArray();
-
-        // Begin package Array
-        foreach($order_details as &$order_detail)
-        {
-            $package = DB::table('packages')
-            ->where('packages.package_id','=',$order_detail->package_id)
-            ->select('packages.*')
-            ->first();
-
-            $order_detail->package = $package;
-        }
-        // End package sop Array
-
-         // Begin custom sop Array
-         foreach($order_details as &$order_detail)
-         {
-             $custom_sops = DB::table('custom_sops')
-             ->where('custom_sops.order_detail_id','=',$order_detail->order_detail_id)
-             ->select('custom_sops.*')
-             ->get()
-             ->toArray();
- 
-             $order_detail->custom_sops = array_filter($custom_sops, function($custom_sop) use ($order_detail) {
-                return $custom_sop->order_detail_id === $order_detail->order_detail_id;
-            });
-         }
-         // End custom sop Array
-
-        $order->order_details = array_filter($order_details, function($order_detail) use ($order) {
-            return $order_detail->order_id === $order->order_id;
-        });
-        
+        }        
 
         return response()->json([
             'status' => 200,
