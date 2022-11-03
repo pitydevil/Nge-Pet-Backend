@@ -40,6 +40,7 @@ use App\Http\Controllers\SupportedPetController;
 
 Route::prefix('monitoring')->group(function() {
     Route::post('/get-monitoring-by-date', [MonitoringController::class, 'getMonitoringByDate']);
+    Route::post('/get-detail-monitoring', [MonitoringController::class, 'getDetailMonitoring']);
 });
 
 Route::prefix('explore')->group(function() {
