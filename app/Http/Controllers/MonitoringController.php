@@ -187,7 +187,7 @@ class MonitoringController extends Controller
         ], 200);
     }
 
-    public function addMonitoring(Request $request){
+    public function createMonitoringData(Request $request){
         $validator = Validator::make($request->all(), [
             'monitoring_activity' => 'required|string',
             'order_detail_id' => 'required|integer',
