@@ -81,7 +81,7 @@ class ExploreController extends Controller
         }
 
         //Sorting Pet Hotel Collection by nearest
-        $pet_hotel_sort = $pet_hotel->sortBy('pet_hotel_distance');
+        $pet_hotel_sort = $pet_hotel->sortBy('pet_hotel_distance')->values();
 
         return response()->json([
             'status' => 200,
@@ -162,7 +162,7 @@ class ExploreController extends Controller
         }
 
         //Sorting Pet Hotel Collection by nearest
-        $pet_hotel_sort = $pet_hotel->sortBy('pet_hotel_distance');
+        $pet_hotel_sort = $pet_hotel->sortBy('pet_hotel_distance')->values();
 
         return response()->json([
             'status' => 200,
