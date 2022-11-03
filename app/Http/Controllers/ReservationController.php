@@ -75,25 +75,65 @@ class ReservationController extends Controller
         ]);
     }
 
-    public function getOrderList(){
-        $orders = Order::select(
-                'orders.order_id','orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 
+    public function getOrderList(Request $request){
+        $order_status = "finish-order";
+
+        if($request->order_status !== "riwayat") {
+            $orders = Order::select(
+                'orders.order_id','orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 'orders.order_status', 
                 'pet_hotels.pet_hotel_name', 
-                'order_details.pet_name','order_details.pet_type','order_details.pet_size',
-                'packages.package_name',
-                DB::raw('count(custom_sops.custom_sop_id) as custom_sops_count')
             )
+            ->where('order_status', '!=', $order_status)
             ->join('pet_hotels', 'orders.pet_hotel_id', '=', 'pet_hotels.pet_hotel_id')
-            ->join('order_details', 'orders.order_id', '=', 'order_details.order_id')
-            ->join('custom_sops', 'order_details.order_detail_id', '=', 'custom_sops.order_detail_id')
-            ->join('packages', 'packages.package_id', '=', 'order_details.package_id')
-            ->groupBy(
-                'orders.order_id','orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 
-                'pet_hotels.pet_hotel_name', 
-                'order_details.pet_name','order_details.pet_type','order_details.pet_size',
-                'packages.package_name',
-            )
             ->get();
+
+            foreach($orders as $order){
+                $order_details = OrderDetail::select(
+                    'order_details.pet_name','order_details.pet_type','order_details.pet_size',
+                    'packages.package_name',
+                    DB::raw('count(custom_sops.custom_sop_id) as custom_sops_count')
+                )
+                ->where('order_details.order_id', '=', $order->order_id)
+                ->join('custom_sops', 'order_details.order_detail_id', '=', 'custom_sops.order_detail_id')
+                ->join('packages', 'packages.package_id', '=', 'order_details.package_id')
+                ->groupBy(
+                    'order_details.pet_name','order_details.pet_type','order_details.pet_size',
+                    'packages.package_name',
+                )
+                ->get();
+
+                $order->order_detail = $order_details;
+            }
+
+        } else {
+ 
+            $orders = Order::select(
+                'orders.order_id','orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 'orders.order_status', 
+                'pet_hotels.pet_hotel_name', 
+            )
+            ->where('order_status', '=', $order_status)
+            ->join('pet_hotels', 'orders.pet_hotel_id', '=', 'pet_hotels.pet_hotel_id')
+            ->get();
+
+            foreach($orders as $order){
+                $order_details = OrderDetail::select(
+                    'order_details.pet_name','order_details.pet_type','order_details.pet_size',
+                    'packages.package_name',
+                    DB::raw('count(custom_sops.custom_sop_id) as custom_sops_count')
+                )
+                ->where('order_details.order_id', '=', $order->order_id)
+                ->join('custom_sops', 'order_details.order_detail_id', '=', 'custom_sops.order_detail_id')
+                ->join('packages', 'packages.package_id', '=', 'order_details.package_id')
+                ->groupBy(
+                    'order_details.pet_name','order_details.pet_type','order_details.pet_size',
+                    'packages.package_name',
+                )
+                ->get();
+
+                $order->order_detail = $order_details;
+            }
+        }
+
 
         if (!$orders)  {
             return response()->json([
