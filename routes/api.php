@@ -31,11 +31,15 @@ use App\Http\Controllers\SupportedPetController;
 |
 */
 
+// Route::prefix('monitoring')->group(function() {
+//     Route::post('/', [MonitoringController::class, 'getAllByDate']);
+//     Route::post('/getDetailMonitoring', [MonitoringController::class, 'getDetailMonitoring']);
+//     Route::post('/getPetByDate', [MonitoringController::class, 'getPetByDate']);
+//     Route::post('/addMonitoring', [MonitoringController::class, 'addMonitoring']);
+// });
+
 Route::prefix('monitoring')->group(function() {
-    Route::post('/', [MonitoringController::class, 'getAllByDate']);
-    Route::post('/getDetailMonitoring', [MonitoringController::class, 'getDetailMonitoring']);
-    Route::post('/getPetByDate', [MonitoringController::class, 'getPetByDate']);
-    Route::post('/addMonitoring', [MonitoringController::class, 'addMonitoring']);
+    Route::post('/get-monitoring-by-date', [MonitoringController::class, 'getMonitoringByDate']);
 });
 
 Route::prefix('explore')->group(function() {

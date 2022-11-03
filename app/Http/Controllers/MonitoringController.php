@@ -69,7 +69,7 @@ class MonitoringController extends Controller
         ], 200);
     }
 
-    public function getAllByDate(Request $request){
+    public function getMonitoringByDate(Request $request){
         $date = $request->date;
         $time = strtotime($date);
         $date_object = date('Y-m-d',$time);
@@ -108,7 +108,7 @@ class MonitoringController extends Controller
                     'order_detail_price' => $orderDetail->order_detail_price,
                     'custom_SOP' => CustomSOP::where('order_detail_id', '=', $orderDetail->order_detail_id)->get()->all(),
                     'monitoring' => $monitoring_array,
-    
+
                     'monitoring_image' => $test->map(function ($c) {
                         return [
                         'monitoring_image_id' => $c->monitoring_image_id,
@@ -119,7 +119,7 @@ class MonitoringController extends Controller
            });
            array_push($cart, $result);
         }
-        
+
         return response()->json([
             'status' => 200,
             'error' => null,
@@ -146,7 +146,7 @@ class MonitoringController extends Controller
                     'data' => null,
                 ], 404);
             }
-            
+
             foreach ($order as $object) {
                 $order_detail = OrderDetail::where('order_id', '=', $object->order_id)->where('pet_name', $value['pet_name'])->get()->all();
                 foreach ($order_detail as $od) {
@@ -174,8 +174,8 @@ class MonitoringController extends Controller
                             'monitoring_image_url' => $c->monitoring_image_url,
                             ];
                         }),
-                    ]; 
-                    array_push($pet_array, $final_pet);  
+                    ];
+                    array_push($pet_array, $final_pet);
                 }
             }
         }
