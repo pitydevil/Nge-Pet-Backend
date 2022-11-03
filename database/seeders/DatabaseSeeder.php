@@ -28,7 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PackageDetailSeeder:: class);
         $this->call(OrderDetailSeeder::class);
         $this->call(MonitoringSeeder::class);
-        
         $this->call(MonitoringImageSeeder::class);
         $this->call(CustomSOPSeeder::class);
     }
