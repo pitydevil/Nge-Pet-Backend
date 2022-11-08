@@ -27,7 +27,7 @@ class ReservationController extends Controller
                                         'petHotelImage', 'fasilitas', 'sopGeneral', 'asuransi', 'cancelSOP',
                                     ])
                                 ->first();
-        
+
         if (!$pet_hotel)  {
             return response()->json([
                 'status' => 404,
@@ -45,7 +45,7 @@ class ReservationController extends Controller
             $supported_pet_type     = SupportedPetType::where('supported_pet_id', $sp->supported_pet_id)->get();
             $sp->supported_pet_types = $supported_pet_type;
         }
-        
+
         return response()->json([
             'status' => 200,
             'error' => null,
@@ -80,8 +80,8 @@ class ReservationController extends Controller
 
         if($request->order_status !== "riwayat") {
             $orders = Order::select(
-                'orders.order_id','orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 'orders.order_status', 
-                'pet_hotels.pet_hotel_name', 
+                'orders.order_id','orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 'orders.order_status',
+                'pet_hotels.pet_hotel_name',
             )
             ->where('order_status', '!=', $order_status)
             ->join('pet_hotels', 'orders.pet_hotel_id', '=', 'pet_hotels.pet_hotel_id')
@@ -106,10 +106,10 @@ class ReservationController extends Controller
             }
 
         } else {
- 
+
             $orders = Order::select(
-                'orders.order_id','orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 'orders.order_status', 
-                'pet_hotels.pet_hotel_name', 
+                'orders.order_id','orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 'orders.order_status',
+                'pet_hotels.pet_hotel_name',
             )
             ->where('order_status', '=', $order_status)
             ->join('pet_hotels', 'orders.pet_hotel_id', '=', 'pet_hotels.pet_hotel_id')
@@ -153,7 +153,7 @@ class ReservationController extends Controller
     public function getOrderDetail(Request $request){
         $order = Order::where('orders.order_id', '=', $request->order_id)
                         ->with([
-                            'petHotel', 'petHotel.cancelSOP', 'orderDetail', 'orderDetail.package', 'orderDetail.customSOP'
+                            'petHotel', 'petHotel.petHotelImage', 'petHotel.cancelSOP', 'orderDetail', 'orderDetail.package', 'orderDetail.customSOP'
                         ])
                         ->first();
 
@@ -163,7 +163,7 @@ class ReservationController extends Controller
                 'error' => 'ORDER_NOT_FOUND',
                 'data' => null,
             ], 404);
-        }        
+        }
 
         return response()->json([
             'status' => 200,
