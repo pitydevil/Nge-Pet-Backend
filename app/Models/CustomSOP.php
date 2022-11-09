@@ -21,9 +21,4 @@ class CustomSOP extends Model
     {
         return $this->belongsTo(OrderDetail::class, 'order_detail_id');
     }
-
-    public function monitoring()
-    {
-        return $this->belongsTo(Monitoring::class, 'monitoring_id');
-    }
 }

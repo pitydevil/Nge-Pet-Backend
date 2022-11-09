@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('monitorings', function (Blueprint $table) {
             $table->id('monitoring_id');
             $table->longText('monitoring_activity');
+            $table->longText('custom_sops');
             $table->foreignId('order_detail_id')->constrained('order_details', 'order_detail_id')->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamps();
         });

@@ -12,17 +12,12 @@ class Monitoring extends Model
     protected $table='monitorings';
 
     protected $primaryKey = 'monitoring_id';
-    protected $fillable = ['monitoring_activity', 'order_detail_id'];
+    protected $fillable = ['monitoring_activity', 'order_detail_id', 'custom_sops'];
     protected $hidden = ['created_at', 'updated_at'];
 
     public function orderDetail()
     {
         return $this->belongsTo(OrderDetail::class, 'order_detail_id');
-    }
-
-    public function customSOP()
-    {
-        return $this->hasMany(CustomSOP::class, 'monitoring_id');
     }
 
     public function monitoringImage()
