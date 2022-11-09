@@ -240,7 +240,6 @@ class ReservationController extends Controller
                 $custom = CustomSOP::create([
                     'custom_sop_name' => $custom_sop['custom_sop_name'],
                     'order_detail_id' => $detail->order_detail_id,
-                    'monitoring_id' => 1,
                 ]);
             }
         }
