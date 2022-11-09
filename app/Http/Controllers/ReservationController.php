@@ -173,8 +173,21 @@ class ReservationController extends Controller
     }
 
     public function addOrder(Request $request){
+
+        function generateOrderCode() {
+            $order_count = Order::count();
+            $order_code = 'ORD-';
+            if(($order_count+ 1) < 10) {
+                $order_code .= '00' .($order_count+ 1);
+            } else if(($order_count+ 1) < 100) {
+                $order_code .= '0' .($order_count+ 1);
+            } else {
+                $order_code .($order_count+ 1);
+            }
+            return $order_code;
+        }
+
         $validator_order = Validator::make($request->all(), [
-            'order_code' => 'required|string',
             'order_total_price' => 'required|integer',
             'order_date_checkin' => 'required|string',
             'order_date_checkin' => 'required|string',
@@ -190,7 +203,7 @@ class ReservationController extends Controller
         }
 
         $order = Order::create([
-            'order_code' => $request->post('order_code'),
+            'order_code' => generateOrderCode(),
             'order_date_checkin' => $request->post('order_date_checkin'),
             'order_date_checkout' => $request->post('order_date_checkout'),
             'order_total_price' => $request->post('order_total_price'),
