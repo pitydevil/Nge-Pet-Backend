@@ -16,24 +16,68 @@ class FasilitasSeeder extends Seeder
      */
     public function run()
     {
-
+        //Fasilitas Status
+        // 1 -> Fasilitas yang pasti didapat
+        // 2 -> Fasilitas dengan kondisi dan paket tertentu ( dengan tanda *)
         Fasilitas::create([
-            'fasilitas_name' => 'Kandang Anjing',
-            'fasilitas_icon_url' => 'contoh-url',
-            'fasilitas_status' => 'tersedia',
+            'fasilitas_name' => 'Antar Jemput',
+            'fasilitas_icon_url' => '#',
+            'fasilitas_status' => 2,
             'pet_hotel_id' => 1,
         ]);
         Fasilitas::create([
-            'fasilitas_name' => 'Kandang Kucing',
-            'fasilitas_icon_url' => 'contoh-url',
-            'fasilitas_status' => 'tersedia',
-            'pet_hotel_id' => 1, 
+            'fasilitas_name' => 'Grooming',
+            'fasilitas_icon_url' => '#',
+            'fasilitas_status' => 2,
+            'pet_hotel_id' => 1,
         ]);
         Fasilitas::create([
-            'fasilitas_name' => 'Tempat Bermain',
-            'fasilitas_icon_url' => 'contoh-url',
-            'fasilitas_status' => 'tersedia',
-            'pet_hotel_id' => 1, 
+            'fasilitas_name' => 'AC dan Kipas Angin',
+            'fasilitas_icon_url' => '#',
+            'fasilitas_status' => 1,
+            'pet_hotel_id' => 1,
+        ]);
+        Fasilitas::create([
+            'fasilitas_name' => 'Pembersihan Kandang',
+            'fasilitas_icon_url' => '#',
+            'fasilitas_status' => 1,
+            'pet_hotel_id' => 1,
+        ]);
+        Fasilitas::create([
+            'fasilitas_name' => 'Pembersihan Tempat Makan',
+            'fasilitas_icon_url' => '#',
+            'fasilitas_status' => 1,
+            'pet_hotel_id' => 1,
+        ]);
+        Fasilitas::create([
+            'fasilitas_name' => 'Antar Jemput',
+            'fasilitas_icon_url' => '#',
+            'fasilitas_status' => 2,
+            'pet_hotel_id' => 1,
+        ]);
+        Fasilitas::create([
+            'fasilitas_name' => 'Grooming',
+            'fasilitas_icon_url' => '#',
+            'fasilitas_status' => 2,
+            'pet_hotel_id' => 1,
+        ]);
+        Fasilitas::create([
+            'fasilitas_name' => 'AC dan Kipas Angin',
+            'fasilitas_icon_url' => '#',
+            'fasilitas_status' => 1,
+            'pet_hotel_id' => 1,
+        ]);
+        Fasilitas::create([
+            'fasilitas_name' => 'Pembersihan Kandang',
+            'fasilitas_icon_url' => '#',
+            'fasilitas_status' => 1,
+            'pet_hotel_id' => 1,
+        ]);
+        Fasilitas::create([
+            'fasilitas_name' => 'Pembersihan Tempat Makan',
+            'fasilitas_icon_url' => '#',
+            'fasilitas_status' => 1,
+            'pet_hotel_id' => 1,
         ]);
     }
 }

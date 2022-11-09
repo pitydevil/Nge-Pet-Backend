@@ -11,22 +11,31 @@ class PackageSeeder extends Seeder
     public function run()
     {
         Package::create([
-            'package_name' => 'paket 1',
-            'package_price' => 40000,
+            'package_name' => 'Basic',
+            'package_price' => 60000,
             'pet_hotel_id' => 1,
             'supported_pet_id' => 1,
         ]);
+
         Package::create([
-            'package_name' => 'paket 1',
-            'package_price' => 40000,
-            'pet_hotel_id' => 2,
-            'supported_pet_id' => 3,
+            'package_name' => 'Plus',
+            'package_price' => 70000,
+            'pet_hotel_id' => 1,
+            'supported_pet_id' => 1,
         ]);
+
         Package::create([
-            'package_name' => 'paket 1',
-            'package_price' => 50000,
-            'pet_hotel_id' => 3,
-            'supported_pet_id' => 4,
+            'package_name' => 'Premium',
+            'package_price' => 80000,
+            'pet_hotel_id' => 1,
+            'supported_pet_id' => 1,
+        ]);
+
+        Package::create([
+            'package_name' => 'Exclusive',
+            'package_price' => 1250000,
+            'pet_hotel_id' => 1,
+            'supported_pet_id' => 1,
         ]);
     }
 }

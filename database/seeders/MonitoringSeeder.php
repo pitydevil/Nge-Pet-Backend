@@ -16,19 +16,9 @@ class MonitoringSeeder extends Seeder
      */
     public function run()
     {
-        Monitoring::create([
-            'monitoring_activity' => 'Anjingnya sedang Makan lagi',
-            'order_detail_id' => 1,
-        ]);
-
-        Monitoring::create([
-            'monitoring_activity' => 'kucing sedang Makan lagi',
-            'order_detail_id' => 2,
-        ]);
-
-        Monitoring::create([
-            'monitoring_activity' => 'kucing sedang Makan lagi',
-            'order_detail_id' => 3,
-        ]);
+        // Monitoring::create([
+        //     'monitoring_activity' => 'Anjingnya sedang Makan lagi',
+        //     'order_detail_id' => 1,
+        // ]);
     }
 }
