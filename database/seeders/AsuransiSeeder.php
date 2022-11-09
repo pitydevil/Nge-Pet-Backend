@@ -16,16 +16,35 @@ class AsuransiSeeder extends Seeder
     public function run()
     {
         Asuransi::create([
-            'asuransi_description' => 'Pertanggung jawaban pertama saat hewan anda mengalami kecelakaan.',
+            'asuransi_id' => 1,
+            'asuransi_description' => 'Hewan yang kembali dalam keadaan sakit akan memperoleh ganti rugi',
             'pet_hotel_id'=> 1,
         ]);
         Asuransi::create([
-            'asuransi_description' => 'Hewan anda dijamin memiliki kesahjeteraan yang sangat mumpuni.',
+            'asuransi_id' => 2,
+            'asuransi_description' => 'Contoh jaminan singkat',
             'pet_hotel_id'=> 1,
         ]);
         Asuransi::create([
-            'asuransi_description' => 'Jaminan kesehatan dan tenaga ahli selama 24 jam.',
+            'asuransi_id' => 3,
+            'asuransi_description' => 'Hewan yang kembali dalam keadaan sakit akan memperoleh ganti rugi',
             'pet_hotel_id'=> 1,
         ]);
+        Asuransi::create([
+            'asuransi_id' => 4,
+            'asuransi_description' => 'Hewan yang kembali dalam keadaan sakit akan memperoleh ganti rugi',
+            'pet_hotel_id'=> 1,
+        ]);
+        Asuransi::create([
+            'asuransi_id' => 5,
+            'asuransi_description' => 'Contoh jaminan singkat',
+            'pet_hotel_id'=> 1,
+        ]);
+        Asuransi::create([
+            'asuransi_id' => 6,
+            'asuransi_description' => 'Hewan yang kembali dalam keadaan sakit akan memperoleh ganti rugi',
+            'pet_hotel_id'=> 1,
+        ]);
+
     }
 }

@@ -6,28 +6,12 @@ use App\Models\SupportedPet;
 
 class SupportedPetSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         SupportedPet::create([
-            'supported_pet_name'=> 'Anjing',
-            'pet_hotel_id' => 1
-        ]);
-        SupportedPet::create([
+            'supported_pet_id' => 1,
             'supported_pet_name'=> 'Kucing',
             'pet_hotel_id' => 1
-        ]);
-        SupportedPet::create([
-            'supported_pet_name'=> 'Anjing',
-            'pet_hotel_id' => 2
-        ]);
-        SupportedPet::create([
-            'supported_pet_name'=> 'Kucing',
-            'pet_hotel_id' => 3
         ]);
     }
 }
