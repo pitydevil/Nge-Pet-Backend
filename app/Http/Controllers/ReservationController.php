@@ -46,6 +46,9 @@ class ReservationController extends Controller
             $sp->supported_pet_types = $supported_pet_type;
         }
 
+        $package                            = Package::where('pet_hotel_id', $request->pet_hotel_id)->orderBy('package_price', 'asc')->first();
+        $pet_hotel->pet_hotel_start_price   = number_format($package->package_price, 0, ",", ".");
+
         return response()->json([
             'status' => 200,
             'error' => null,
