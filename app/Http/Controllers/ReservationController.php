@@ -158,7 +158,7 @@ class ReservationController extends Controller
             return response()->json([
                 'status' => 200,
                 'error' => null,
-                'data' => "Order status tidak valid!",
+                'data' => $request->all(),
             ]);
         }
 
