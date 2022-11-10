@@ -95,7 +95,7 @@ class ReservationController extends Controller
 
         if($request->order_status == "aktif") {
             $orders = Order::select(
-                'orders.order_id','orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 'orders.order_status',
+                'orders.order_id', 'orders.user_id', 'orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 'orders.order_status',
                 'pet_hotels.pet_hotel_name',
             )
             ->where('order_status', '!=', $order_status)
@@ -126,7 +126,7 @@ class ReservationController extends Controller
         } else if($request->order_status == "riwayat") {
 
             $orders = Order::select(
-                'orders.order_id','orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 'orders.order_status',
+                'orders.order_id', 'orders.user_id', 'orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 'orders.order_status',
                 'pet_hotels.pet_hotel_name',
             )
             ->where('order_status', '=', $order_status)
@@ -160,7 +160,7 @@ class ReservationController extends Controller
         }
 
 
-        if (!$orders || $orders.length == 0)  {
+        if (!$orders)  {
             return response()->json([
                 'status' => 404,
                 'error' => 'ORDER_NOT_FOUND',
