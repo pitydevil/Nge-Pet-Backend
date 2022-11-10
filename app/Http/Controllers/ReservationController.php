@@ -59,7 +59,7 @@ class ReservationController extends Controller
                                     'packageDetail',
                                 ])
                             ->get();
-
+        
         if (!$packages)  {
             return response()->json([
                 'status' => 404,
@@ -67,11 +67,25 @@ class ReservationController extends Controller
                 'data' => null,
             ], 404);
         }
+        
+        foreach($packages as $package){
+            //Get supported pet type data for certain supported pet and put into supported pet object
+            $supported_pet     = SupportedPet::where('supported_pet_id', $package->supported_pet_id)->first();
+            $package->supported_pet_name = $supported_pet->supported_pet_name;
+        }
+
+        $filtered_packages = array();
+
+        foreach($packages as $package){
+            if($package->supported_pet_name === $request->supported_pet_name) {
+                array_push($filtered_packages, $package);
+            }
+        } 
 
         return response()->json([
             'status' => 200,
             'error' => null,
-            'data' => $packages,
+            'data' => $filtered_packages,
         ]);
     }
 
@@ -89,6 +103,7 @@ class ReservationController extends Controller
 
             foreach($orders as $order){
                 $order_details = OrderDetail::select(
+                    'order_details.order_detail_id',
                     'order_details.pet_name','order_details.pet_type','order_details.pet_size',
                     'packages.package_name',
                     DB::raw('count(custom_sops.custom_sop_id) as custom_sops_count')
@@ -97,6 +112,7 @@ class ReservationController extends Controller
                 ->join('custom_sops', 'order_details.order_detail_id', '=', 'custom_sops.order_detail_id')
                 ->join('packages', 'packages.package_id', '=', 'order_details.package_id')
                 ->groupBy(
+                    'order_details.order_detail_id',
                     'order_details.pet_name','order_details.pet_type','order_details.pet_size',
                     'packages.package_name',
                 )
@@ -117,14 +133,14 @@ class ReservationController extends Controller
 
             foreach($orders as $order){
                 $order_details = OrderDetail::select(
-                    'order_details.pet_name','order_details.pet_type','order_details.pet_size',
+                    'order_details.order_detail_id','order_details.pet_name','order_details.pet_type','order_details.pet_size',
                     'packages.package_name',
                     DB::raw('count(custom_sops.custom_sop_id) as custom_sops_count')
                 )
                 ->where('order_details.order_id', '=', $order->order_id)
                 ->join('custom_sops', 'order_details.order_detail_id', '=', 'custom_sops.order_detail_id')
                 ->join('packages', 'packages.package_id', '=', 'order_details.package_id')
-                ->groupBy(
+                ->groupBy('order_details.order_detail_id',
                     'order_details.pet_name','order_details.pet_type','order_details.pet_size',
                     'packages.package_name',
                 )
@@ -153,7 +169,7 @@ class ReservationController extends Controller
     public function getOrderDetail(Request $request){
         $order = Order::where('orders.order_id', '=', $request->order_id)
                         ->with([
-                            'petHotel', 'petHotel.petHotelImage', 'petHotel.cancelSOP', 'orderDetail', 'orderDetail.package', 'orderDetail.customSOP'
+                            'petHotel', 'petHotel.petHotelImage', 'petHotel.cancelSOP'
                         ])
                         ->first();
 
@@ -164,6 +180,30 @@ class ReservationController extends Controller
                 'data' => null,
             ], 404);
         }
+
+        $order_detail = OrderDetail::where('order_details.order_id', '=', $request->order_id)
+                        ->with([
+                            'package', 'customSOP'
+                        ])
+                        ->get();
+
+        foreach($order_detail as $detail){
+            $sops_count = OrderDetail::select(
+                'order_details.order_detail_id',
+                DB::raw('count(custom_sops.custom_sop_id) as custom_sops_count')
+            )
+            ->where('order_details.order_detail_id', '=', $detail->order_detail_id)
+            ->join('custom_sops', 'order_details.order_detail_id', '=', 'custom_sops.order_detail_id')
+            ->join('packages', 'packages.package_id', '=', 'order_details.package_id')
+            ->groupBy('order_details.order_detail_id',
+            )
+            ->first();
+            
+            $detail->custom_sops_count = $sops_count->custom_sops_count;
+        }
+
+        // bind order detail to order have order detail
+        $order->order_detail = $order_detail;
 
         return response()->json([
             'status' => 200,
@@ -191,7 +231,6 @@ class ReservationController extends Controller
             'order_total_price' => 'required|integer',
             'order_date_checkin' => 'required|string',
             'order_date_checkin' => 'required|string',
-            'order_status' => 'required|string',
         ]);
 
         if ($validator_order->fails()) {
@@ -207,7 +246,7 @@ class ReservationController extends Controller
             'order_date_checkin' => $request->post('order_date_checkin'),
             'order_date_checkout' => $request->post('order_date_checkout'),
             'order_total_price' => $request->post('order_total_price'),
-            'order_status' => $request->post('order_status'),
+            'order_status' =>  "waiting-for-confirmation",
             'user_id' => $request->post('user_id'),
             'pet_hotel_id' => $request->post('pet_hotel_id'),
         ]);
