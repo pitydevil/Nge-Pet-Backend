@@ -59,7 +59,7 @@ class ReservationController extends Controller
                                     'packageDetail',
                                 ])
                             ->get();
-        
+
         if (!$packages)  {
             return response()->json([
                 'status' => 404,
@@ -67,7 +67,7 @@ class ReservationController extends Controller
                 'data' => null,
             ], 404);
         }
-        
+
         foreach($packages as $package){
             //Get supported pet type data for certain supported pet and put into supported pet object
             $supported_pet     = SupportedPet::where('supported_pet_id', $package->supported_pet_id)->first();
@@ -80,7 +80,7 @@ class ReservationController extends Controller
             if($package->supported_pet_name === $request->supported_pet_name) {
                 array_push($filtered_packages, $package);
             }
-        } 
+        }
 
         return response()->json([
             'status' => 200,
@@ -90,14 +90,16 @@ class ReservationController extends Controller
     }
 
     public function getOrderList(Request $request){
-        $order_status = "finish-order";
+        $order_status   = "finish-order";
+        $user_id        = $request->user_id;
 
-        if($request->order_status !== "riwayat") {
+        if($request->order_status == "aktif") {
             $orders = Order::select(
                 'orders.order_id','orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 'orders.order_status',
                 'pet_hotels.pet_hotel_name',
             )
             ->where('order_status', '!=', $order_status)
+            ->where('user_id', $user_id)
             ->join('pet_hotels', 'orders.pet_hotel_id', '=', 'pet_hotels.pet_hotel_id')
             ->get();
 
@@ -121,13 +123,14 @@ class ReservationController extends Controller
                 $order->order_detail = $order_details;
             }
 
-        } else {
+        } else if($request->order_status == "riwayat") {
 
             $orders = Order::select(
                 'orders.order_id','orders.order_code','orders.order_date_checkin','orders.order_date_checkout','orders.order_date_checkout', 'orders.order_status',
                 'pet_hotels.pet_hotel_name',
             )
             ->where('order_status', '=', $order_status)
+            ->where('user_id', $user_id)
             ->join('pet_hotels', 'orders.pet_hotel_id', '=', 'pet_hotels.pet_hotel_id')
             ->get();
 
@@ -148,6 +151,12 @@ class ReservationController extends Controller
 
                 $order->order_detail = $order_details;
             }
+        } else {
+            return response()->json([
+                'status' => 200,
+                'error' => null,
+                'data' => "Order status tidak valid!",
+            ]);
         }
 
 
@@ -198,7 +207,7 @@ class ReservationController extends Controller
             ->groupBy('order_details.order_detail_id',
             )
             ->first();
-            
+
             $detail->custom_sops_count = $sops_count->custom_sops_count;
         }
 
