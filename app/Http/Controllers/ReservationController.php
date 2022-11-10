@@ -160,7 +160,7 @@ class ReservationController extends Controller
         }
 
 
-        if (!$orders)  {
+        if (!$orders || $orders.length == 0)  {
             return response()->json([
                 'status' => 404,
                 'error' => 'ORDER_NOT_FOUND',
