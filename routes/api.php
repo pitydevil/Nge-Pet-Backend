@@ -63,3 +63,7 @@ Route::prefix('reservation')->group(function() {
         Route::post('/update-status', [PetHotelController::class, 'updateOrderStatus']);
     });
 });
+
+Route::prefix('pet_hotel')->group(function() {
+    Route::post('/order-list', [PetHotelController::class, 'getPetHotelOrderList']);
+});

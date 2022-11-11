@@ -40,7 +40,7 @@ class PetHotelController extends Controller
             ])
             ->orderBy('created_at', 'DESC')
             ->paginate($limit);
-        
+
         return response()->json([
             'status' => 200,
             'error' => null,
@@ -62,7 +62,7 @@ class PetHotelController extends Controller
                 'pet_hotel_images,pet_hotel_images.pet_hotel_image_id,pet_hotel_image_url',
                 ])
             ->first();
-        
+
         if (!$pet_hotel)  {
             return response()->json([
                 'status' => 404,
@@ -70,7 +70,7 @@ class PetHotelController extends Controller
                 'data' => null,
             ], 404);
         }
-        
+
         return response()->json([
             'status' => 200,
             'error' => null,
@@ -97,54 +97,54 @@ class PetHotelController extends Controller
 
 
         $sop_general = SOPGeneral::where('sop_generals_id', '=', $request->post('sop_generals_id'))->first();
- 
+
         if (!$sop_general) {
             return response()->json([
             'status' => 404,
-             'error' => 'SOP_GENERAL_ID_NOT_FOUND', 
-             'data' => null ], 
+             'error' => 'SOP_GENERAL_ID_NOT_FOUND',
+             'data' => null ],
              404);
         }
 
         $asuransi = Asuransi::where('asuransi_id', '=', $request->post('asuransi_id'))->first();
- 
+
         if (!$asuransi) {
             return response()->json([
             'status' => 404,
-             'error' => 'ASURANSI_ID_NOT_FOUND', 
-             'data' => null ], 
+             'error' => 'ASURANSI_ID_NOT_FOUND',
+             'data' => null ],
              404);
         }
 
 
         $package = Package::where('package_id', '=', $request->post('package_id'))->first();
- 
+
         if (!$package) {
             return response()->json([
             'status' => 404,
-             'error' => 'PACKAGES_ID_NOT_FOUND', 
-             'data' => null ], 
+             'error' => 'PACKAGES_ID_NOT_FOUND',
+             'data' => null ],
              404);
         }
 
         $fasilitas = Fasilitas::where('fasilitas_id', '=', $request->post('fasilitas_id'))->first();
- 
+
         if (!$fasilitas) {
             return response()->json([
             'status' => 404,
-             'error' => 'FASILITAS_ID_NOT_FOUND', 
-             'data' => null ], 
+             'error' => 'FASILITAS_ID_NOT_FOUND',
+             'data' => null ],
              404);
         }
 
 
         $cancel_sop = CancelSOP::where('cancel_sops_id', '=', $request->post('cancel_sops_id'))->first();
- 
+
         if (!$cancel_sop) {
             return response()->json([
             'status' => 404,
-             'error' => 'CANCEL_SOP_ID_NOT_FOUND', 
-             'data' => null ], 
+             'error' => 'CANCEL_SOP_ID_NOT_FOUND',
+             'data' => null ],
              404);
         }
 
@@ -153,8 +153,8 @@ class PetHotelController extends Controller
         if (!$supported_pet) {
             return response()->json([
             'status' => 404,
-             'error' => 'SUPPORTED_PET_ID_NOT_FOUND', 
-             'data' => null ], 
+             'error' => 'SUPPORTED_PET_ID_NOT_FOUND',
+             'data' => null ],
              404);
         }
 
@@ -163,8 +163,8 @@ class PetHotelController extends Controller
         if (!$pet_hotel_image) {
             return response()->json([
             'status' => 404,
-             'error' => 'PET_HOTEL_IMAGE_ID_NOT_FOUND', 
-             'data' => null ], 
+             'error' => 'PET_HOTEL_IMAGE_ID_NOT_FOUND',
+             'data' => null ],
              404);
         }
 
@@ -211,33 +211,33 @@ class PetHotelController extends Controller
             ->first();
 
         $sop_general = SOPGeneral::where('sop_generals_id', '=', $request->post('sop_generals_id'))->first();
- 
+
         if (!$sop_general) {
             return response()->json([
             'status' => 404,
-             'error' => 'SOP_GENERAL_NOT_FOUND', 
-             'data' => null ], 
+             'error' => 'SOP_GENERAL_NOT_FOUND',
+             'data' => null ],
              404);
         }
 
         $asuransi = Asuransi::where('asuransi_id', '=', $request->post('asuransi_id'))->first();
- 
+
         if (!$asuransi) {
             return response()->json([
             'status' => 404,
-             'error' => 'ASURANSI_NOT_FOUND', 
-             'data' => null ], 
+             'error' => 'ASURANSI_NOT_FOUND',
+             'data' => null ],
              404);
         }
 
 
         $package = Package::where('package_id', '=', $request->post('package_id'))->first();
- 
+
         if (!$package) {
             return response()->json([
             'status' => 404,
-             'error' => 'PACKAGES_NOT_FOUND', 
-             'data' => null ], 
+             'error' => 'PACKAGES_NOT_FOUND',
+             'data' => null ],
              404);
         }
 
@@ -245,19 +245,19 @@ class PetHotelController extends Controller
 
         if (!$fasilitas) {
             return response()->json([
-                'status' => 404, 
+                'status' => 404,
                 'error' => 'FASILITAS_NOT_FOUND',
-                'data' => null 
+                'data' => null
             ], 404);
         }
 
         $cancel_sop = CancelSOP::where('cancel_sops_id', '=', $request->post('cancel_sops_id'))->first();
- 
+
         if (!$cancel_sop) {
             return response()->json([
             'status' => 404,
-             'error' => 'CANCEL_SOP_NOT_FOUND', 
-             'data' => null ], 
+             'error' => 'CANCEL_SOP_NOT_FOUND',
+             'data' => null ],
              404);
         }
 
@@ -265,9 +265,9 @@ class PetHotelController extends Controller
 
         if (!$supported_pet) {
             return response()->json([
-                'status' => 404, 
+                'status' => 404,
                 'error' => 'SUPPORTED_PET_NOT_FOUND',
-                'data' => null 
+                'data' => null
             ], 404);
         }
 
@@ -276,8 +276,8 @@ class PetHotelController extends Controller
         if (!$pet_hotel_image) {
             return response()->json([
             'status' => 404,
-             'error' => 'PET_HOTEL_IMAGE_NOT_FOUND', 
-             'data' => null ], 
+             'error' => 'PET_HOTEL_IMAGE_NOT_FOUND',
+             'data' => null ],
              404);
         }
 
@@ -310,7 +310,7 @@ class PetHotelController extends Controller
         ]);
     }
 
-    public function addMonitoring(Request $request){        
+    public function addMonitoring(Request $request){
         $validator = Validator::make($request->all(), [
             'monitoring_activity' => 'required|string',
             'order_detail_id' => 'required|integer',
@@ -416,6 +416,18 @@ class PetHotelController extends Controller
             'status' => 200,
             'error' => null,
             'data' => $order,
+        ]);
+    }
+
+    public function getPetHotelOrderList(Request $request){
+        $pet_hotel_id   = $request->pet_hotel_id;
+
+        $orders  = Order::where('pet_hotel_id', $pet_hotel_id)->with('OrderDetail')->with('OrderDetail.CustomSOP')->get();
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => $orders,
         ]);
     }
 }
