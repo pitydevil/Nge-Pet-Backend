@@ -343,14 +343,14 @@ class MonitoringController extends Controller
     }
 
     public function getMonitoringData(Request $request){
-        $order_status   = "finish-order";
+        $order_status   = "in-monitoring";
         $user_id        = $request->user_id;
         $date           = $request->date;
         $pets           = $request->pets;
 
         $data = array();
 
-        $orders         = Order::where('user_id', $user_id)->where('order_status', '!=', $order_status)->get();
+        $orders         = Order::where('user_id', $user_id)->where('order_status', '=', $order_status)->get();
 
         if (!$orders)  {
             return response()->json([
