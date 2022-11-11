@@ -37,8 +37,6 @@ Route::prefix('monitoring')->group(function() {
     Route::post('/get-detail-monitoring', [MonitoringController::class, 'getDetailMonitoring']);
     Route::post('/get-pet-by-date', [MonitoringController::class, 'getPetByDate']);
     Route::post('/get-monitoring-data', [MonitoringController::class, 'getMonitoringData']);
-    Route::post('/get-monitoring-data-by-date', [MonitoringController::class, 'getMonitoringDataByDate']);
-    Route::post('/get-monitoring-data-by-pet', [MonitoringController::class, 'getMonitoringDataByPet']);
 
     // ROUTE FOR PET HOTEL
     Route::post('/add', [PetHotelController::class, 'addMonitoring']);
