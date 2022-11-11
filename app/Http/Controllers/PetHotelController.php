@@ -8,6 +8,9 @@ use App\Http\Requests\UpdatePetHotelRequest;
 use App\Models\Asuransi;
 use App\Models\CancelSOP;
 use App\Models\Fasilitas;
+use App\Models\Monitoring;
+use App\Models\MonitoringImage;
+use App\Models\Order;
 use App\Models\Package;
 use App\Models\PetHotel;
 use App\Models\PetHotelImage;
@@ -16,6 +19,8 @@ use App\Models\SupportedPet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+
+use function PHPSTORM_META\map;
 
 class PetHotelController extends Controller
 {
@@ -305,23 +310,112 @@ class PetHotelController extends Controller
         ]);
     }
 
-    public function delete(Request $request, int $id){
-        $pet_hotel = PetHotel::where('pet_hotel_id', '=', $id)
-            ->first();
+    public function addMonitoring(Request $request){        
+        $validator = Validator::make($request->all(), [
+            'monitoring_activity' => 'required|string',
+            'order_detail_id' => 'required|integer',
+        ]);
 
-        if (!$pet_hotel) {
+        if ($validator->fails()) {
             return response()->json([
-                'status' => 404,
-                'error' => 'PET_HOTEL_NOT_FOUND',
-                'data' => null,
-            ], 404);
-        } 
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
 
-        $pet_hotel->delete();
+        $custom_sops = $request->custom_sops;
+        $custom_sops_encode = '';
+        $custom_sops_counter = 0;
+
+        foreach($custom_sops as $custom_sop) {
+            if ($custom_sops_counter === count($custom_sops) - 1) {
+                $custom_sops_encode .= $custom_sop['custom_sop_id'];
+            } else{
+                $custom_sops_encode .= $custom_sop['custom_sop_id'].',';
+            }
+            $custom_sops_counter++;
+        }
+
+        $monitoring =  Monitoring::create([
+            'monitoring_activity' => $request->post('monitoring_activity'),
+            'order_detail_id' => $request->post('order_detail_id'),
+            'custom_sops' => $custom_sops_encode,
+        ]);
+
+        $monitoring_images = $request->monitoring_images;
+
+        foreach($monitoring_images as $image) {
+            MonitoringImage::create([
+                'monitoring_image_url' => $image['monitoring_image_url'],
+                'monitoring_id' => $monitoring->monitoring_id,
+            ]);
+        }
+
         return response()->json([
             'status' => 200,
             'error' => null,
             'data' => null,
+        ]);
+    }
+
+    public function deleteMonitoring(Request $request){
+        $monitoring = Monitoring::where('monitoring_id', '=', $request->monitoring_id)
+            ->first();
+
+        if (!$monitoring) {
+            return response()->json([
+                'status' => 404,
+                'error' => 'MONITORING_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
+
+        $monitoring_images = MonitoringImage::where('monitoring_id', '=', $monitoring->monitoring_id)
+                            ->get();
+
+        foreach($monitoring_images as $image) {
+            $image->delete();
+        }
+
+        $monitoring->delete();
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => null,
+        ]);
+    }
+
+    public function updateOrderStatus(Request $request){
+        $validator = Validator::make($request->all(), [
+            'order_status' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => $validator->errors(),
+            ], 400);
+        }
+
+        $order = Order::where('order_id', '=', $request->order_id)
+        ->first();
+
+        if (!$order) return response()->json([
+            'status' => 404,
+            'error' => 'ORDER_NOT_FOUND',
+            'data' => null,
+        ], 404);
+
+        $order->order_status = $request->post('order_status', $order->order_status);
+        $order->save();
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => $order,
         ]);
     }
 }
