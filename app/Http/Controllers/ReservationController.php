@@ -265,8 +265,6 @@ class ReservationController extends Controller
 
         $order_details = $request->order_details;
 
-        $count = null;
-
         foreach($order_details as $order_detail)
         {
             $detail = OrderDetail::create([
@@ -288,7 +286,7 @@ class ReservationController extends Controller
 
             foreach($custom_sops as $custom_sop)
             {
-                $custom = CustomSOP::create([
+                CustomSOP::create([
                     'custom_sop_name' => $custom_sop['custom_sop_name'],
                     'order_detail_id' => $detail->order_detail_id,
                 ]);
@@ -298,39 +296,7 @@ class ReservationController extends Controller
         return response()->json([
             'status' => 200,
             'error' => null,
-            'data' => $count,
-        ]);
-    }
-
-    public function updateOrderStatus(Request $request){
-        $validator = Validator::make($request->all(), [
-            'order_status' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 400,
-                'error' => 'INVALID_REQUEST',
-                'data' => $validator->errors(),
-            ], 400);
-        }
-
-        $order = Order::where('order_id', '=', $request->order_id)
-        ->first();
-
-        if (!$order) return response()->json([
-            'status' => 404,
-            'error' => 'ORDER_NOT_FOUND',
             'data' => null,
-        ], 404);
-
-        $order->order_status = $request->post('order_status', $order->order_status);
-        $order->save();
-
-        return response()->json([
-            'status' => 200,
-            'error' => null,
-            'data' => $order,
         ]);
     }
 }

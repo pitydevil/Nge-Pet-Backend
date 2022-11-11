@@ -32,13 +32,17 @@ use App\Http\Controllers\SupportedPetController;
 */
 
 Route::prefix('monitoring')->group(function() {
+    // ROUTE FOR PET OWNER
     Route::post('/get-monitoring-by-date', [MonitoringController::class, 'getMonitoringByDate']);
     Route::post('/get-detail-monitoring', [MonitoringController::class, 'getDetailMonitoring']);
     Route::post('/get-pet-by-date', [MonitoringController::class, 'getPetByDate']);
-    Route::post('/create-monitoring-data', [MonitoringController::class, 'createMonitoringData']);
     Route::post('/get-monitoring-data', [MonitoringController::class, 'getMonitoringData']);
     Route::post('/get-monitoring-data-by-date', [MonitoringController::class, 'getMonitoringDataByDate']);
     Route::post('/get-monitoring-data-by-pet', [MonitoringController::class, 'getMonitoringDataByPet']);
+
+    // ROUTE FOR PET HOTEL
+    Route::post('/add', [PetHotelController::class, 'addMonitoring']);
+    Route::delete('/delete/{id}', [PetHotelController::class, 'deleteMonitoring']);
 });
 
 Route::prefix('explore')->group(function() {
@@ -52,9 +56,12 @@ Route::prefix('reservation')->group(function() {
         Route::post('/package', [ReservationController::class, 'getPetHotelPackage']);
     });
     Route::prefix('order')->group(function() {
+        // ROUTE FOR PET OWNER
         Route::post('/list', [ReservationController::class, 'getOrderList']);
         Route::post('/detail', [ReservationController::class, 'getOrderDetail']);
         Route::post('/add', [ReservationController::class, 'addOrder']);
-        Route::post('/update-status', [ReservationController::class, 'updateOrderStatus']);
+
+        // ROUTE FOR PET HOTEL
+        Route::post('/update-status', [PetHotelController::class, 'updateOrderStatus']);
     });
 });
