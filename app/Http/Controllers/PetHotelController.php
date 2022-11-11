@@ -359,8 +359,8 @@ class PetHotelController extends Controller
         ]);
     }
 
-    public function deleteMonitoring(Request $request){
-        $monitoring = Monitoring::where('monitoring_id', '=', $request->monitoring_id)
+    public function deleteMonitoring(Request $request, $id){
+        $monitoring = Monitoring::where('monitoring_id', '=', $id)
             ->first();
 
         if (!$monitoring) {
