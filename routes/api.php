@@ -67,4 +67,5 @@ Route::prefix('reservation')->group(function() {
 
 Route::prefix('pet_hotel')->group(function() {
     Route::post('/order-list', [PetHotelController::class, 'getPetHotelOrderList']);
+    Route::post('/get-custom-sop-list', [PetHotelController::class, 'getCustomSOPList']);
 });

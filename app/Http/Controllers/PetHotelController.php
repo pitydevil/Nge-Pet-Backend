@@ -488,4 +488,15 @@ class PetHotelController extends Controller
                 'data' => $data
             ]);
     }
+
+    public function getCustomSOPList(Request $request){
+        $order_detail_id    = $request->order_detail_id;
+        $custom_sops        = CustomSOP::where('order_detail_id', $order_detail_id)->get();
+
+        return response()->json([
+            'status' => 200,
+            'error' => null,
+            'data' => $custom_sops,
+        ]);
+    }
 }
