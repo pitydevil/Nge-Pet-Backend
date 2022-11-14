@@ -25,6 +25,7 @@ return new class extends Migration
             $table->longText('pet_hotel_kota');
             $table->longText('pet_hotel_provinsi');
             $table->integer('pet_hotel_pos');
+            $table->foreignId('owner_id')->constrained('owners', 'owner_id')->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamps();
 
         });

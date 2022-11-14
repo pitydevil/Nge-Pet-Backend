@@ -420,9 +420,14 @@ class PetHotelController extends Controller
     }
 
     public function getPetHotelOrderList(Request $request){
-        $pet_hotel_id   = $request->pet_hotel_id;
+        $owner_id       = $request->owner_id;
+
+        $pet_hotel      = PetHotel::where('owner_id', $owner_id)->first();
+
+        $pet_hotel_id   = $pet_hotel->pet_hotel_id;
 
         $orders  = Order::where('pet_hotel_id', $pet_hotel_id)->with('OrderDetail')->with('OrderDetail.CustomSOP')->get();
+        $orders->pet_hotel_name = $pet_hotel->pet_hotel_name;
 
         return response()->json([
             'status' => 200,

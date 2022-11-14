@@ -12,7 +12,7 @@ class PetHotel extends Model
     protected $table='pet_hotels';
 
     protected $primaryKey = 'pet_hotel_id';
-    protected $fillable = ['pet_hotel_name', 'pet_hotel_description', 'pet_hotel_longitude','pet_hotel_latitude', 'pet_hotel_address', 'pet_hotel_kelurahan', 'pet_hotel_kecamatan', 'pet_hotel_kota', 'pet_hotel_provinsi', 'pet_hotel_pos'];
+    protected $fillable = ['pet_hotel_name', 'pet_hotel_description', 'pet_hotel_longitude','pet_hotel_latitude', 'pet_hotel_address', 'pet_hotel_kelurahan', 'pet_hotel_kecamatan', 'pet_hotel_kota', 'pet_hotel_provinsi', 'pet_hotel_pos', 'owner_id'];
     protected $hidden = ['created_at', 'updated_at'];
 
     public function asuransi()
@@ -53,5 +53,10 @@ class PetHotel extends Model
     public function supportedPet()
     {
         return $this->hasMany(SupportedPet::class, 'pet_hotel_id');
+    }
+
+    public function owner()
+    {
+        return $this->hasOne(Owner::class, 'owner_id');
     }
 }
