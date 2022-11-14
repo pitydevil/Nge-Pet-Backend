@@ -41,6 +41,7 @@ Route::prefix('monitoring')->group(function() {
     // ROUTE FOR PET HOTEL
     Route::post('/add', [PetHotelController::class, 'addMonitoring']);
     Route::delete('/delete/{id}', [PetHotelController::class, 'deleteMonitoring']);
+    Route::post('/get-pet-hotel-monitoring-list', [PetHotelController::class, 'getPetHotelMonitoringList']);
 });
 
 Route::prefix('explore')->group(function() {
