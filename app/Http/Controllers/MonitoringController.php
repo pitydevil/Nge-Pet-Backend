@@ -374,7 +374,7 @@ class MonitoringController extends Controller
 
                     foreach($order_details as $order_detail){
                         $monitorings        = Monitoring::where('order_detail_id', $order_detail->order_detail_id)->whereDate('created_at', 'LIKE', $date)->with('MonitoringImage')->get();
-        
+
                         if (!$monitorings)  {
                             return response()->json([
                                 'status' => 404,
@@ -382,20 +382,22 @@ class MonitoringController extends Controller
                                 'data' => null,
                             ], 404);
                         }
-        
+
                         foreach ($monitorings as $monitoring) {
                             date_default_timezone_set("Asia/Jakarta");
                             $time_now       = date("Y-m-d");
                             $time_delta     = "";
-        
+
                             if($date == $time_now){
                                 $time_upload                = date("Y-m-d h:i:sa", strtotime($monitoring->created_at));
                                 $time_now                   = date("Y-m-d h:i:sa");
                                 $from_time  = strtotime($time_upload);
                                 $to_time    = strtotime($time_now);
                                 $diff_time  = round(abs($from_time - $to_time) / 60);
+                                $notification = false;
                                 if($diff_time < 60){
                                     $diff_time  = round(abs($from_time - $to_time) / 60). "m";
+                                    $notification = true;
                                 }else if($diff_time >= 60 && $diff_time < 1440){
                                     $diff_time  = round($diff_time/60). "h";
                                 }
@@ -403,22 +405,23 @@ class MonitoringController extends Controller
                             }else if($date < $time_now){
                                 $time_delta = date("d M y, H.i", strtotime($monitoring->created_at));
                             }
-        
+
                             $custom_sop_value   = array();
-        
+
                             $custom_sops_datas  = explode(',',$monitoring->custom_sops);
                             foreach($custom_sops_datas as $custom_sop_data){
                                 $custom_sops    = CustomSOP::where('custom_sop_id', $custom_sop_data)->get();
-        
+
                                 foreach($custom_sops as $custom_sop){
                                     array_push($custom_sop_value, $custom_sop);
                                 }
                             }
-        
+
                             $monitoring->time_upload    = $time_delta;
                             $monitoring->pet_hotel_name = $pet_hotel->pet_hotel_name;
                             $monitoring->pet_name       = $order_detail->pet_name;
                             $monitoring->custom_sops    = $custom_sop_value;
+                            $monitoring->notification   = $notification;
                             array_push($data, $monitoring);
                         }
                     }
