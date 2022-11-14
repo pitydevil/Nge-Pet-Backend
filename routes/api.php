@@ -69,7 +69,5 @@ Route::prefix('pet_hotel')->group(function() {
         Route::post('/get-list-by-order-detail', [PetHotelController::class, 'getPetHotelMonitoringList']);
     });
 
-    Route::prefix('auth')->group(function() {
-        Route::post('/auth', [OwnerController::class, 'authOwner']);
-    });
+    Route::post('/auth', [OwnerController::class, 'authOwner']);
 });
