@@ -354,7 +354,7 @@ class PetHotelController extends Controller
         }
 
         return response()->json([
-            'status' => 200,
+            'status' => 201,
             'error' => null,
             'data' => null,
         ]);
@@ -425,9 +425,25 @@ class PetHotelController extends Controller
 
         $pet_hotel      = PetHotel::where('owner_id', $owner_id)->first();
 
+        if (!$pet_hotel) {
+            return response()->json([
+                'status' => 404,
+                'error' => 'PET_HOTEL_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
+
         $pet_hotel_id   = $pet_hotel->pet_hotel_id;
 
         $orders  = Order::where('pet_hotel_id', $pet_hotel_id)->with('OrderDetail')->with('OrderDetail.CustomSOP')->get();
+
+        if (!$orders) {
+            return response()->json([
+                'status' => 404,
+                'error' => 'ORDERS_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
         $orders->pet_hotel_name = $pet_hotel->pet_hotel_name;
 
         return response()->json([
@@ -492,6 +508,14 @@ class PetHotelController extends Controller
     public function getCustomSOPList(Request $request){
         $order_detail_id    = $request->order_detail_id;
         $custom_sops        = CustomSOP::where('order_detail_id', $order_detail_id)->get();
+
+        if (!$custom_sops) {
+            return response()->json([
+                'status' => 404,
+                'error' => 'CUSTOM_SOP_NOT_FOUND',
+                'data' => null,
+            ], 404);
+        }
 
         return response()->json([
             'status' => 200,
