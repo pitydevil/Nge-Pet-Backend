@@ -156,9 +156,9 @@ class ReservationController extends Controller
             }
         } else {
             return response()->json([
-                'status' => 200,
-                'error' => null,
-                'data' => "Order status tidak valid!",
+                'status' => 400,
+                'error' => 'INVALID_REQUEST',
+                'data' => null,
             ]);
         }
 
@@ -276,12 +276,6 @@ class ReservationController extends Controller
                 'package_id' => $order_detail['package_id'],
             ]);
 
-            // $monitoring_activity = $order->order_code.'- Aktivtias Hewan';
-            // $monitoring = Monitoring::create([
-            //     'monitoring_activity' => $monitoring_activity,
-            //     'order_detail_id' => $detail->order_detail_id,
-            // ]);
-
             $custom_sops = $order_detail['custom_sops'];
 
             foreach($custom_sops as $custom_sop)
@@ -294,7 +288,7 @@ class ReservationController extends Controller
         }
 
         return response()->json([
-            'status' => 200,
+            'status' => 201,
             'error' => null,
             'data' => null,
         ]);
