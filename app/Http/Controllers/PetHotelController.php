@@ -456,7 +456,7 @@ class PetHotelController extends Controller
     public function getPetHotelMonitoringList(Request $request){
         $order_detail_id    = $request->order_detail_id;
         $data = array();
-        $monitorings        = Monitoring::where('order_detail_id', $order_detail_id)->get();
+        $monitorings        = Monitoring::where('order_detail_id', $order_detail_id)->with('monitoringImage')->get();
 
         if (!$monitorings)  {
             return response()->json([

@@ -22,7 +22,8 @@ class PetHotelSeeder extends Seeder
             'pet_hotel_kota' => 'Bekasi',
             'pet_hotel_provinsi' => 'Jawa Barat',
             'pet_hotel_pos' => 17111,
-            'owner_id'      => 1
+            'owner_id'      => 1,
+            'supported_pet_status'  => 1
         ]);
     }
 }

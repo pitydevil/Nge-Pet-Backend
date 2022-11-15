@@ -96,10 +96,23 @@ class ExploreController extends Controller
         $myLatitude     = $request->latitude;
         $myCheckInDate  = $request->check_in_date;
         $myCheckOutDate = $request->check_out_date;
-        $myPet          = $request->pet;
+        $myPet          = $request->pets;
+        $pet_supported  = 0;
+
+        foreach($myPet as $pet){
+            if($pet['pet_type'] == "Kucing" && $pet_supported == 0){
+                $pet_supported = 1;
+            }else if($pet['pet_type'] == "Anjing" && $pet_supported == 0){
+                $pet_supported = 2;
+            }else if($pet['pet_type'] == "Kucing" && $pet_supported == 2){
+                $pet_supported = 3;
+            }else if($pet['pet_type'] == "Anjing" && $pet_supported == 1){
+                $pet_supported = 3;
+            }
+        }
 
         //Calculate the distance between pet hotel and user
-        function getDistanceBetweenPoints($myLongitude, $myLatitude, $pet_hotel_longitude, $pet_hotel_latitude) {
+        function getDistanceBetweenPoints2($myLongitude, $myLatitude, $pet_hotel_longitude, $pet_hotel_latitude) {
             $theta = $myLongitude - $pet_hotel_longitude;
             $miles = (sin(deg2rad($myLatitude)) * sin(deg2rad($pet_hotel_latitude))) + (cos(deg2rad($myLatitude)) * cos(deg2rad($pet_hotel_latitude)) * cos(deg2rad($theta)));
             $miles = acos($miles);
@@ -121,8 +134,17 @@ class ExploreController extends Controller
             }
         }
 
+        if($pet_supported == 1){
+            $pet_hotel = PetHotel::select('pet_hotel_id', 'pet_hotel_name', 'pet_hotel_longitude', 'pet_hotel_latitude', 'supported_pet_status')->WHERE('supported_pet_status', $pet_supported)->get();
+        }else if($pet_supported == 2){
+            $pet_hotel = PetHotel::select('pet_hotel_id', 'pet_hotel_name', 'pet_hotel_longitude', 'pet_hotel_latitude', 'supported_pet_status')->WHERE('supported_pet_status', $pet_supported)->get();
+        }else if($pet_supported == 3){
+            $pet_hotel = PetHotel::select('pet_hotel_id', 'pet_hotel_name', 'pet_hotel_longitude', 'pet_hotel_latitude', 'supported_pet_status')->WHERE('supported_pet_status', $pet_supported)->get();
+        }
+
+
         //Get all pet hotel data
-        $pet_hotel = PetHotel::select('pet_hotel_id', 'pet_hotel_name', 'pet_hotel_longitude', 'pet_hotel_latitude')->get();
+        //$pet_hotel = PetHotel::select('pet_hotel_id', 'pet_hotel_name', 'pet_hotel_longitude', 'pet_hotel_latitude')->with('SupportedPet')->get();
 
         //If pet hotel data is null
         if (!$pet_hotel)  {
@@ -139,7 +161,7 @@ class ExploreController extends Controller
             $pet_hotel_latitude  = $data->pet_hotel_latitude;
 
             //Calculate the distance and put into data object
-            $distance                   = getDistanceBetweenPoints($myLongitude, $myLatitude, $pet_hotel_longitude, $pet_hotel_latitude);
+            $distance                   = getDistanceBetweenPoints2($myLongitude, $myLatitude, $pet_hotel_longitude, $pet_hotel_latitude);
             $data->pet_hotel_distance   = $distance;
 
             //Get first Pet Hotel image for certain pet hotel and put into data object
@@ -167,7 +189,7 @@ class ExploreController extends Controller
         return response()->json([
             'status' => 200,
             'error' => null,
-            'data' => $pet_hotel_sort
+            'data' => $pet_hotel
         ]);
 
     }
