@@ -387,6 +387,7 @@ class MonitoringController extends Controller
                             date_default_timezone_set("Asia/Jakarta");
                             $time_now       = date("Y-m-d");
                             $time_delta     = "";
+                            $notification = false;
 
                             if($date == $time_now){
                                 $time_upload                = date("Y-m-d h:i:sa", strtotime($monitoring->created_at));
@@ -394,7 +395,6 @@ class MonitoringController extends Controller
                                 $from_time  = strtotime($time_upload);
                                 $to_time    = strtotime($time_now);
                                 $diff_time  = round(abs($from_time - $to_time) / 60);
-                                $notification = false;
                                 if($diff_time < 60){
                                     $diff_time  = round(abs($from_time - $to_time) / 60). "m";
                                     $notification = true;
