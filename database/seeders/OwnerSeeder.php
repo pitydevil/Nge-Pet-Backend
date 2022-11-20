@@ -35,5 +35,40 @@ class OwnerSeeder extends Seeder
             'email' => 'owner@test4.com',
             'password'=>'12345678'
         ]);
+        Owner::create([
+            'username'=> 'owner_test_5',
+            'email' => 'owner@test5.com',
+            'password'=>'12345678'
+        ]);
+        Owner::create([
+            'username'=> 'owner_test_6',
+            'email' => 'owner@test6.com',
+            'password'=>'12345678'
+        ]);
+        Owner::create([
+            'username'=> 'owner_test_7',
+            'email' => 'owner@test7.com',
+            'password'=>'12345678'
+        ]);
+        Owner::create([
+            'username'=> 'owner_test_8',
+            'email' => 'owner@test8.com',
+            'password'=>'12345678'
+        ]);
+        Owner::create([
+            'username'=> 'owner_test_9',
+            'email' => 'owner@test9.com',
+            'password'=>'12345678'
+        ]);
+        Owner::create([
+            'username'=> 'owner_test_10',
+            'email' => 'owner@test10.com',
+            'password'=>'12345678'
+        ]);
+        Owner::create([
+            'username'=> 'owner_test_11',
+            'email' => 'owner@test11.com',
+            'password'=>'12345678'
+        ]);
     }
 }
