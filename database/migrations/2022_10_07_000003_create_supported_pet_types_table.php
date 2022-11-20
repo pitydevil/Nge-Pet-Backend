@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id("supported_pet_type_id");
             $table->longText("supported_pet_type_short_size");
             $table->longText("supported_pet_type_size");
+            $table->longText("supported_pet_type_description");
             $table->foreignId('supported_pet_id')->constrained('supported_pets', 'supported_pet_id')->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamps();
         });
