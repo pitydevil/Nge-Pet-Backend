@@ -62,11 +62,11 @@ class OwnerController extends Controller
         $pet_hotel_cancel_sop       = $request->pet_hotel_cancel_sop;
         $pet_hotel_fasilitas        = $request->pet_hotel_fasilitas;
         $pet_hotel_package          = $request->pet_hotel_package;
-        $package_details            = $pet_hotel_package["package_details"];
+        //$package_details            = $pet_hotel_package["package_details"];
         $pet_hotel_image            = $request->pet_hotel_image;
         $pet_hotel_sop_general      = $request->pet_hotel_sop_general;
         $pet_hotel_supported_pet    = $request->pet_hotel_supported_pet;
-        $supported_pet_type         = $pet_hotel_supported_pet["supported_pet_type"];
+        //$supported_pet_type         = $pet_hotel_supported_pet["supported_pet_type"];
 
         $supported_pet_status  = 0;
 
@@ -110,10 +110,11 @@ class OwnerController extends Controller
                 'pet_hotel_id'          => $pet_hotel->pet_hotel_id
             ]);
 
-            foreach($supported_pet_type as $spt){
+            foreach($phsp["supported_pet_type"] as $spt){
                 SupportedPetType::create([
                     'supported_pet_type_short_size' => $spt["supported_pet_type_short_size"],
                     'supported_pet_type_size'       => $spt["supported_pet_type_size"],
+                    'supported_pet_type_description'=>$spt["supported_pet_type_description"],
                     'supported_pet_id'              => $supported_pet->supported_pet_id
                 ]);
             }
@@ -128,7 +129,7 @@ class OwnerController extends Controller
 
         foreach($pet_hotel_cancel_sop as $phca){
             CancelSOP::create([
-                'cancel_sops_description'   => $phca["asuransi_description"],
+                'cancel_sops_description'   => $phca["cancel_sops_description"],
                 'pet_hotel_id'              => $pet_hotel->pet_hotel_id
             ]);
         }
@@ -150,7 +151,7 @@ class OwnerController extends Controller
                 'pet_hotel_id'      => $pet_hotel->pet_hotel_id
             ]);
 
-            foreach($package_details as $pd){
+            foreach($php["package_details"] as $pd){
                 PackageDetail::create([
                     'package_detail_name'   => $pd["package_detail_name"],
                     'package_id'            => $package->package_id
@@ -160,7 +161,7 @@ class OwnerController extends Controller
 
         foreach($pet_hotel_sop_general as $phsg){
             SOPGeneral::create([
-                'sop_general_description'   => $phsg["sop_general_description"],
+                'sop_generals_description'   => $phsg["sop_general_description"],
                 'pet_hotel_id'              => $pet_hotel->pet_hotel_id
             ]);
         }
