@@ -217,7 +217,7 @@ class ExploreController extends Controller
         return response()->json([
             'status' => 200,
             'error' => null,
-            'data' => $pet_hotel
+            'data' => $pet_hotel_sort
         ]);
 
     }
