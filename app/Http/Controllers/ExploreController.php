@@ -29,15 +29,16 @@ class ExploreController extends Controller
             $kilometers = round($miles * 1.609344);
             $meters = round($kilometers * 1000);
             //Return with meter if distance < 1000 m
-            if($meters < 1000)
-            {
-                return $meters. "m";
-            }
-            //Return with meter if distance > 1000 m
-            else if($meters > 1000)
-            {
-                return $kilometers. "km";
-            }
+            // if($meters < 1000)
+            // {
+            //     return $meters. "m";
+            // }
+            // //Return with meter if distance > 1000 m
+            // else if($meters > 1000)
+            // {
+            //     return $kilometers. "km";
+            // }
+            return $meters;
         }
 
         //Get all pet hotel data
@@ -59,7 +60,21 @@ class ExploreController extends Controller
 
             //Calculate the distance and put into data object
             $distance                   = getDistanceBetweenPoints($myLongitude, $myLatitude, $pet_hotel_longitude, $pet_hotel_latitude);
-            $data->pet_hotel_distance   = $distance;
+            $data->distance   = $distance;
+            if($distance < 1000)
+            {
+                $data->pet_hotel_distance   = $distance. "m";
+                // return $meters. "m";
+            }
+            //Return with meter if distance > 1000 m
+            else if($distance > 1000)
+            {
+                $data->pet_hotel_distance   = round($distance / 1000). "km";
+                // round($distance / 1000);
+                // return $kilometers. "km";
+            }
+
+            // $data->pet_hotel_distance   = $distance;
 
             //Get first Pet Hotel image for certain pet hotel and put into data object
             $pet_hotel_image        = PetHotelImage::select('pet_hotel_id', 'pet_hotel_image_url')->where('pet_hotel_id', $data->pet_hotel_id)->first();
@@ -81,7 +96,7 @@ class ExploreController extends Controller
         }
 
         //Sorting Pet Hotel Collection by nearest
-        $pet_hotel_sort = $pet_hotel->sortBy('pet_hotel_distance')->values();
+        $pet_hotel_sort = $pet_hotel->sortBy('distance')->values();
 
         return response()->json([
             'status' => 200,
@@ -123,15 +138,16 @@ class ExploreController extends Controller
             $kilometers = round($miles * 1.609344);
             $meters = round($kilometers * 1000);
             //Return with meter if distance < 1000 m
-            if($meters < 1000)
-            {
-                return $meters. "m";
-            }
-            //Return with meter if distance > 1000 m
-            else if($meters > 1000)
-            {
-                return $kilometers. "km";
-            }
+            // if($meters < 1000)
+            // {
+            //     return $meters. "m";
+            // }
+            // //Return with meter if distance > 1000 m
+            // else if($meters > 1000)
+            // {
+            //     return $kilometers. "km";
+            // }
+            return $meters;
         }
 
         if($pet_supported == 1){
@@ -162,7 +178,19 @@ class ExploreController extends Controller
 
             //Calculate the distance and put into data object
             $distance                   = getDistanceBetweenPoints2($myLongitude, $myLatitude, $pet_hotel_longitude, $pet_hotel_latitude);
-            $data->pet_hotel_distance   = $distance;
+            $data->distance   = $distance;
+            if($distance < 1000)
+            {
+                $data->pet_hotel_distance   = $distance. "m";
+                // return $meters. "m";
+            }
+            //Return with meter if distance > 1000 m
+            else if($distance > 1000)
+            {
+                $data->pet_hotel_distance   = round($distance / 1000). "km";
+                // round($distance / 1000);
+                // return $kilometers. "km";
+            }
 
             //Get first Pet Hotel image for certain pet hotel and put into data object
             $pet_hotel_image        = PetHotelImage::select('pet_hotel_id', 'pet_hotel_image_url')->where('pet_hotel_id', $data->pet_hotel_id)->first();
@@ -184,7 +212,7 @@ class ExploreController extends Controller
         }
 
         //Sorting Pet Hotel Collection by nearest
-        $pet_hotel_sort = $pet_hotel->sortBy('pet_hotel_distance')->values();
+        $pet_hotel_sort = $pet_hotel->sortBy('distance')->values();
 
         return response()->json([
             'status' => 200,
