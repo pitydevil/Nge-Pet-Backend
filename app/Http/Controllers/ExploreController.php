@@ -114,6 +114,10 @@ class ExploreController extends Controller
         $myPet          = $request->pets;
         $pet_supported  = 0;
 
+        if(!$myPet){
+            $pet_supported = 4;
+        }
+
         foreach($myPet as $pet){
             if($pet['pet_type'] == "Kucing" && $pet_supported == 0){
                 $pet_supported = 1;
@@ -122,8 +126,6 @@ class ExploreController extends Controller
             }else if($pet['pet_type'] == "Kucing" && $pet_supported == 2){
                 $pet_supported = 3;
             }else if($pet['pet_type'] == "Anjing" && $pet_supported == 1){
-                $pet_supported = 3;
-            }else {
                 $pet_supported = 3;
             }
         }
@@ -158,8 +160,8 @@ class ExploreController extends Controller
             $pet_hotel = PetHotel::select('pet_hotel_id', 'pet_hotel_name', 'pet_hotel_longitude', 'pet_hotel_latitude', 'supported_pet_status')->WHERE('supported_pet_status', $pet_supported)->get();
         }else if($pet_supported == 3){
             $pet_hotel = PetHotel::select('pet_hotel_id', 'pet_hotel_name', 'pet_hotel_longitude', 'pet_hotel_latitude', 'supported_pet_status')->WHERE('supported_pet_status', $pet_supported)->get();
-        }else {
-            $pet_hotel = PetHotel::select('pet_hotel_id', 'pet_hotel_name', 'pet_hotel_longitude', 'pet_hotel_latitude', 'supported_pet_status')->WHERE('supported_pet_status', $pet_supported)->get();
+        }else if($pet_supported == 4){
+            $pet_hotel = PetHotel::select('pet_hotel_id', 'pet_hotel_name', 'pet_hotel_longitude', 'pet_hotel_latitude', 'supported_pet_status')->get();
         }
 
 
